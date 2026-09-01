@@ -1,6 +1,6 @@
 {
   "name": "itqan",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Itqan — engineering skills suite (إتقان: mastery of the craft). 12 model-agnostic skills running the full software-engineering lifecycle: a resumable orchestrator (engineer), six phases (define, blueprint, construct, verify, inspect, release), and five specialists (discover, design, harden, assess, learn). Approval gates before code, test-first builds, evidence before \"done\". Any stack, any capable AI runtime. Invoked explicitly, never auto-triggered.",
   "author": {
     "name": "Saleh Alhaddad"
