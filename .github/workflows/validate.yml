@@ -1,0 +1,51 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The workflow only reads the repo. Never widen this without a reason written here.
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Validate suite structure
+        run: python .github/scripts/validate.py
+      - name: Test installer
+        run: bash .github/scripts/test_install.sh
+      - name: Test the commands CONVENTIONS prescribes
+        run: bash .github/scripts/test_conventions_commands.sh
+
+      # Skill-security scan (prompt injection, secrets, RCE patterns, third-party
+      # content exposure). Advisory: gating on exit code needs --ci, which the CLI
+      # only honours alongside --dangerously-run-mcp-servers — not something a docs
+      # repo should ever enable. Read the output; don't let it fail the build.
+      - name: Check whether the Snyk scan is enabled
+        id: snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          if [ -n "${SNYK_TOKEN}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "SNYK_TOKEN not set — skipping the skill-security scan."
+            echo "To enable: get a token at https://app.snyk.io/account and add it under"
+            echo "Settings > Secrets and variables > Actions as SNYK_TOKEN."
+          fi
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        if: steps.snyk.outputs.enabled == 'true'
+      - name: Scan skills for security issues (advisory)
+        if: steps.snyk.outputs.enabled == 'true'
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: uvx snyk-agent-scan@0.6.1 scan skills/ --skills

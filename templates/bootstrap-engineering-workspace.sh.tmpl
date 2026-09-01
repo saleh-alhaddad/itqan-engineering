@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Bootstrap (or repair) the engineering/ workspace — idempotent, safe to re-run.
+# Instantiate from templates/bootstrap-engineering-workspace.sh.tmpl by replacing:
+#   {{ENGINEERING_ROOT}}  absolute path to the engineering/ workspace
+#   {{TASK_SLUG}}         current task folder name, e.g. 0001-paym-271  (optional)
+# Generated into a WRITABLE repo (e.g. <repo>/scripts/) when the agent's own writes to
+# the workspace are sandbox-blocked. See skills/_shared/workspace-bootstrap.md.
+# Windows counterpart: bootstrap-engineering-workspace.ps1.tmpl (§9).
+set -euo pipefail
+
+ROOT="{{ENGINEERING_ROOT}}"
+TASK="{{TASK_SLUG}}"
+
+mk() { # mk <path> <heading>  — create only if missing/empty, never overwrite content
+  if [ ! -s "$1" ]; then printf '# %s\n' "$2" > "$1"; echo "created $1"; else echo "exists  $1"; fi
+}
+
+mkdir -p "$ROOT/tasks" "$ROOT/changelog"
+mk "$ROOT/profile.md"   "Profile — how the suite operates here"
+mk "$ROOT/standards.md" "Standards — how this codebase is written"
+mk "$ROOT/decisions.md" "Decisions (ADRs)"
+mk "$ROOT/index.md"     "Task registry"
+
+if [ -n "$TASK" ]; then
+  T="$ROOT/tasks/$TASK"
+  mkdir -p "$T"
+  mk "$T/intake.md" "Intake — $TASK"
+  [ -s "$T/state.json" ] || { printf '{\n  "task": "%s",\n  "phases": {}\n}\n' "$TASK" > "$T/state.json"; echo "created $T/state.json"; }
+fi
+
+echo "--- verification listing ---"
+ls -la "$ROOT" && { [ -n "$TASK" ] && ls -la "$ROOT/tasks/$TASK" || true; }

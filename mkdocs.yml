@@ -1,0 +1,62 @@
+site_name: Itqan — engineering skills suite
+site_description: One resumable orchestrator running the full software-engineering lifecycle, with approval gates and evidence at every step.
+site_url: https://saleh-alhaddad.github.io/itqan-engineering/
+repo_url: https://github.com/saleh-alhaddad/itqan-engineering
+repo_name: saleh-alhaddad/itqan-engineering
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: amber
+      toggle: { icon: material/weather-night, name: Dark mode }
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle: { icon: material/weather-sunny, name: Light mode }
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: { permalink: true }
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Home: README.md
+  - Foundations:
+      - Introduction: 01-introduction.md
+      - Installation & removal: 02-installation.md
+      - Getting started: 03-getting-started.md
+  - The 12 skills:
+      - engineer: skills/engineer.md
+      - define: skills/define.md
+      - blueprint: skills/blueprint.md
+      - construct: skills/construct.md
+      - verify: skills/verify.md
+      - inspect: skills/inspect.md
+      - release: skills/release.md
+      - discover: skills/discover.md
+      - design: skills/design.md
+      - harden: skills/harden.md
+      - assess: skills/assess.md
+      - learn: skills/learn.md
+  - Mastery:
+      - Playbooks: 04-playbooks.md
+      - Conventions guide: 05-conventions-guide.md
+      - FAQ: 06-faq.md

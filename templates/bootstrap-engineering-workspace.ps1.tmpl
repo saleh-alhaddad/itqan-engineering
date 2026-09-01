@@ -1,0 +1,59 @@
+# Bootstrap (or repair) the engineering/ workspace — idempotent, safe to re-run.
+# Windows counterpart of bootstrap-engineering-workspace.sh.tmpl. Instantiate by replacing:
+#   {{ENGINEERING_ROOT}}  absolute path to the engineering/ workspace
+#   {{TASK_SLUG}}         current task folder name, e.g. 0001-rate-limit  (optional)
+# Generated into a WRITABLE repo (e.g. <repo>\scripts\) when the agent's own writes to
+# the workspace are sandbox-blocked. See skills/_shared/workspace-bootstrap.md.
+# Runs on Windows PowerShell 5.1 and PowerShell 7+ — no && , no POSIX utilities.
+$ErrorActionPreference = 'Stop'
+
+$Root = '{{ENGINEERING_ROOT}}'
+$Task = '{{TASK_SLUG}}'
+
+# Write UTF-8 WITHOUT a BOM. Set-Content -Encoding UTF8 emits a BOM on Windows PowerShell
+# 5.1 but not on PS 7 — a BOM on state.json breaks strict JSON parsers, so never use it.
+$Utf8NoBom = New-Object System.Text.UTF8Encoding $false
+function Write-Text {
+  param([string]$Path, [string]$Text)
+  [System.IO.File]::WriteAllText($Path, $Text, $script:Utf8NoBom)
+}
+
+function Test-HasContent {  # exists and is non-empty
+  param([string]$Path)
+  (Test-Path -LiteralPath $Path) -and ((Get-Item -LiteralPath $Path).Length -gt 0)
+}
+
+function New-IfMissing {  # New-IfMissing <path> <heading> — create only if missing/empty
+  param([string]$Path, [string]$Heading)
+  if (Test-HasContent $Path) {
+    Write-Output "exists  $Path"
+  } else {
+    Write-Text $Path "# $Heading`n"
+    Write-Output "created $Path"
+  }
+}
+
+New-Item -ItemType Directory -Force -Path (Join-Path $Root 'tasks')     | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $Root 'changelog') | Out-Null
+
+New-IfMissing (Join-Path $Root 'profile.md')   'Profile — how the suite operates here'
+New-IfMissing (Join-Path $Root 'standards.md') 'Standards — how this codebase is written'
+New-IfMissing (Join-Path $Root 'decisions.md') 'Decisions (ADRs)'
+New-IfMissing (Join-Path $Root 'index.md')     'Task registry'
+
+if ($Task) {
+  $T = Join-Path (Join-Path $Root 'tasks') $Task
+  New-Item -ItemType Directory -Force -Path $T | Out-Null
+  New-IfMissing (Join-Path $T 'intake.md') "Intake — $Task"
+  $StateFile = Join-Path $T 'state.json'
+  if (Test-HasContent $StateFile) {
+    Write-Output "exists  $StateFile"
+  } else {
+    Write-Text $StateFile "{`n  `"task`": `"$Task`",`n  `"phases`": {}`n}`n"
+    Write-Output "created $StateFile"
+  }
+}
+
+Write-Output '--- verification listing ---'
+Get-ChildItem -Force -LiteralPath $Root
+if ($Task) { Get-ChildItem -Force -LiteralPath (Join-Path (Join-Path $Root 'tasks') $Task) }
