@@ -203,7 +203,8 @@ shell, the skill, and the literal error text. Contributions: [CONTRIBUTING.md](C
 
 Long-form writing on the ideas behind the suite, and on using it in practice:
 
-- **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://medium.com/@salehsalem/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** — why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
+1. **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://medium.com/@salehsalem/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** · why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
+2. **[One Command, the Whole Lifecycle](https://salehsalem.medium.com/itqan-engineering-one-command-the-whole-lifecycle-c14d3bd414a4)** · the `engineer` orchestrator on an empty repo: detection, triage, two gates, and the run that produced [itqan-demo](https://github.com/saleh-alhaddad/itqan-demo).
 
 More in the series: one article per skill, each applying it to a real repository.
 
