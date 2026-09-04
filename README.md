@@ -29,7 +29,7 @@ flowchart LR
 
 ## Get started
 
-**1 · Install** (any agent — Claude Code, Cursor, Codex, and more):
+**1 · Install** (installable on 70+ agents: Claude Code, Cursor, Codex, Gemini CLI, Windsurf, Zed, Hermes, and more):
 
 ```bash
 npx skills add saleh-alhaddad/itqan-engineering
@@ -63,6 +63,7 @@ and picks up at the first unproven step.
 | **Guided installer** | `curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh \| bash` | same — checks Node, offers upgrade, git fallback; add `-s -- --auto` for CI |
 | **Claude Code plugin** | `/plugin marketplace add saleh-alhaddad/itqan-engineering` → `/plugin install itqan` | 12 skills, each invocable: `itqan:engineer`, `itqan:inspect`, … |
 | **Cursor** | already covered by npx/installer (`~/.agents/skills/`) | per-project copy & details: [Book ch. 2](docs/02-installation.md#path-d--cursor) |
+| **A specific agent** | `npx skills add saleh-alhaddad/itqan-engineering -a <agent>` | the suite on that agent (`npx skills add --help` lists the 70+ valid names) |
 | **Any other runtime** | point its skill loader at this repo's root `SKILL.md` | the suite, degrading gracefully where a capability is missing |
 
 Updating, verification, troubleshooting, and **clean removal**: [Book ch. 2](docs/02-installation.md).
@@ -203,7 +204,8 @@ shell, the skill, and the literal error text. Contributions: [CONTRIBUTING.md](C
 
 Long-form writing on the ideas behind the suite, and on using it in practice:
 
-- **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://medium.com/@salehsalem/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** — why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
+1. **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://medium.com/@salehsalem/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** · why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
+2. **[One Command, the Whole Lifecycle](https://salehsalem.medium.com/itqan-engineering-one-command-the-whole-lifecycle-c14d3bd414a4)** · the `engineer` orchestrator on an empty repo: detection, triage, two gates, and the run that produced [itqan-demo](https://github.com/saleh-alhaddad/itqan-demo).
 
 More in the series: one article per skill, each applying it to a real repository.
 
