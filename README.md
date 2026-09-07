@@ -207,8 +207,9 @@ shell, the skill, and the literal error text. Contributions: [CONTRIBUTING.md](C
 
 Long-form writing on the ideas behind the suite, and on using it in practice:
 
-1. **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://medium.com/@salehsalem/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** · why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
+1. **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://salehsalem.medium.com/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** · why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
 2. **[One Command, the Whole Lifecycle](https://salehsalem.medium.com/itqan-engineering-one-command-the-whole-lifecycle-c14d3bd414a4)** · the `engineer` orchestrator on an empty repo: detection, triage, two gates, and the run that produced [itqan-demo](https://github.com/saleh-alhaddad/itqan-demo).
+3. **[The Skill That Refuses to Let You Skip the Spec](https://salehsalem.medium.com/the-skill-that-refuses-to-let-you-skip-the-spec-1da1e82d1134)** · `define`: what it asks, why it asks in that order, and why the exclusion list is the valuable half of a spec.
 
 The series continues: how the suite is invoked and adapts, then one article per skill, each grounded in a real run.
 
