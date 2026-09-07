@@ -4,7 +4,7 @@
 
 **One resumable orchestrator that runs the full software-engineering lifecycle — spec → plan → build → verify → review → ship — with approval gates you control and evidence required at every step.**
 
-Pure Markdown skills for any capable AI runtime (Claude Code, Cursor, Codex, Gemini, …).
+Pure Markdown skills, installable on 70+ agents (Claude Code, Cursor, Codex, Gemini CLI, Windsurf, Zed, Hermes, …).
 It adapts to your stack by reading your repo, never fires on its own, and keeps every
 artifact in an `engineering/` workspace that survives sessions, machines, and hand-offs.
 
@@ -135,6 +135,9 @@ What you type depends on the install:
 
 ## What it guarantees
 
+- **Nothing fires on its own** — the router and all twelve skills carry
+  `disable-model-invocation: true`. A skill runs because you named it, never because a model
+  judged it relevant. Check it yourself: `grep -l disable-model-invocation SKILL.md skills/*/SKILL.md`
 - **Two approval gates before code, GO/NO-GO before ship** — recorded in a ledger a resumed
   run cannot skip. Say **no** at a gate and the artifact is revised against your reason,
   never re-presented unchanged.
@@ -207,7 +210,7 @@ Long-form writing on the ideas behind the suite, and on using it in practice:
 1. **[Your AI Agent Doesn't Need to Be Smarter. It Needs Discipline.](https://medium.com/@salehsalem/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-22ffe4be3817)** · why capable models still produce unshippable work, and the four rules that fix it. ([also on dev.to](https://dev.to/salehalhaddad01/your-ai-agent-doesnt-need-to-be-smarter-it-needs-discipline-3h7))
 2. **[One Command, the Whole Lifecycle](https://salehsalem.medium.com/itqan-engineering-one-command-the-whole-lifecycle-c14d3bd414a4)** · the `engineer` orchestrator on an empty repo: detection, triage, two gates, and the run that produced [itqan-demo](https://github.com/saleh-alhaddad/itqan-demo).
 
-More in the series: one article per skill, each applying it to a real repository.
+The series continues: how the suite is invoked and adapts, then one article per skill, each grounded in a real run.
 
 ---
 

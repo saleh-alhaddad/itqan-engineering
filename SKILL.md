@@ -5,6 +5,7 @@ description: >-
   VERIFY, REVIEW, SHIP — with approval gates before code, test-first builds, evidence before
   "done", and resumable multi-session work. Routes to 12 sub-skills covering any stack, plus
   feature discovery, security audit, UI/UX craft, and learning roadmaps.
+disable-model-invocation: true
 ---
 
 # itqan — engineering skills suite router
