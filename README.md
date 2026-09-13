@@ -212,6 +212,7 @@ Long-form writing on the ideas behind the suite, and on using it in practice:
 3. **[The Skill That Refuses to Let You Skip the Spec](https://salehsalem.medium.com/the-skill-that-refuses-to-let-you-skip-the-spec-1da1e82d1134)** · `define`: what it asks, why it asks in that order, and why the exclusion list is the valuable half of a spec.
 4. **[The Skill That Decides What to Build First](https://salehsalem.medium.com/itqan-skills-the-skill-that-decides-what-to-build-first-3ac77679abe5)** · `blueprint`: ordering as a risk decision, checking the ground before planning on it, and recording the rejected option with its trigger.
 5. **[The Skill That Breaks Your Code on Purpose](https://salehsalem.medium.com/itqan-engineering-the-skill-that-breaks-your-code-on-purpose-68781e30fd3e)** · `construct`: test-first in your codebase's own style, then mutating the code to prove the test can actually fail.
+6. **[The Skill That Reads the Log After the Test Passes](https://salehsalem.medium.com/itqan-engineering-the-skill-that-reads-the-log-after-the-test-passes-ac137c586508)** · `verify`: exercising the system rather than the assertions, reading the count not just the outcome, and treating an intermittent failure as the reproduction.
 
 The series continues: how the suite is invoked and adapts, then one article per skill, each grounded in a real run.
 
