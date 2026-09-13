@@ -213,6 +213,7 @@ Long-form writing on the ideas behind the suite, and on using it in practice:
 4. **[The Skill That Decides What to Build First](https://salehsalem.medium.com/itqan-skills-the-skill-that-decides-what-to-build-first-3ac77679abe5)** · `blueprint`: ordering as a risk decision, checking the ground before planning on it, and recording the rejected option with its trigger.
 5. **[The Skill That Breaks Your Code on Purpose](https://salehsalem.medium.com/itqan-engineering-the-skill-that-breaks-your-code-on-purpose-68781e30fd3e)** · `construct`: test-first in your codebase's own style, then mutating the code to prove the test can actually fail.
 6. **[The Skill That Reads the Log After the Test Passes](https://salehsalem.medium.com/itqan-engineering-the-skill-that-reads-the-log-after-the-test-passes-ac137c586508)** · `verify`: exercising the system rather than the assertions, reading the count not just the outcome, and treating an intermittent failure as the reproduction.
+7. **[The Skill That Reviews Without Touching](https://salehsalem.medium.com/itqan-engineering-the-skill-that-reviews-without-touching-9c24480f2801)** · `inspect`: a five-axis review where every finding is proven, causes are reported instead of symptoms, and the reviewer never edits what it judges.
 
 The series continues: how the suite is invoked and adapts, then one article per skill, each grounded in a real run.
 
