@@ -1,5 +1,6 @@
 {
   "name": "itqan",
+  "description": "Itqan engineering skills suite: 12 explicitly invoked skills that run the full software-engineering lifecycle with approval gates and evidence before done.",
   "owner": {
     "name": "Saleh Alhaddad"
   },
