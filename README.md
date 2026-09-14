@@ -214,6 +214,7 @@ Long-form writing on the ideas behind the suite, and on using it in practice:
 5. **[The Skill That Breaks Your Code on Purpose](https://salehsalem.medium.com/itqan-engineering-the-skill-that-breaks-your-code-on-purpose-68781e30fd3e)** · `construct`: test-first in your codebase's own style, then mutating the code to prove the test can actually fail.
 6. **[The Skill That Reads the Log After the Test Passes](https://salehsalem.medium.com/itqan-engineering-the-skill-that-reads-the-log-after-the-test-passes-ac137c586508)** · `verify`: exercising the system rather than the assertions, reading the count not just the outcome, and treating an intermittent failure as the reproduction.
 7. **[The Skill That Reviews Without Touching](https://salehsalem.medium.com/itqan-engineering-the-skill-that-reviews-without-touching-9c24480f2801)** · `inspect`: a five-axis review where every finding is proven, causes are reported instead of symptoms, and the reviewer never edits what it judges.
+8. **[The Skill That Found a Critical and Stopped](https://salehsalem.medium.com/itqan-engineering-the-skill-that-found-a-critical-and-stopped-43e8f510f723)** · `harden`: proving the attack instead of describing it, triaging by reachability rather than scanner count, and waiting for a human yes before touching authentication.
 
 The series continues: how the suite is invoked and adapts, then one article per skill, each grounded in a real run.
 
