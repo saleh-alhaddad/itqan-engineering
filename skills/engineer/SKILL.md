@@ -118,7 +118,8 @@ CONSTRUCT's build).
    the route (§6.1):
    - **Small / low-risk** (one-liner, typo, config, an isolated bug fix, a tiny tweak): fix
      it **directly** — hand to `construct` + `verify`, skip define/blueprint. State that
-     you're treating it as a small change.
+     you're treating it as a small change. **Any big signal cancels this:** more than two
+     code files, a new route or surface, a contract change, or `harden` being scheduled.
    - **Big / multi-step / risky** (a feature, several files, new surface, anything that
      touches architecture): run the **full lifecycle** — DEFINE and PLAN first, and **do not
      start implementing until the user approves the plan**.

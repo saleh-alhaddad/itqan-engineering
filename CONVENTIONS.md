@@ -429,7 +429,9 @@ size it by who depends on it, not by how many lines moved. **Big/multi-step/risk
 feature, several files, a new surface, anything touching architecture or data): run the full
 lifecycle — spec and plan first, **do not implement until the plan is approved**. When
 unsure, treat it as big: a needless plan costs minutes; an unplanned big change costs
-rework.
+rework. **Any big signal overrides "small":** more than two code files, a new route or public
+surface, a change to an existing contract, or a run that schedules `harden`. A user's answer
+to an intake question settles scope; it is not approval of a spec.
 
 ### 6.2 Build ambition (MVP vs full) and UI intake
 
@@ -509,6 +511,7 @@ Never *claim* a gate ran that did not. If a gate was skipped, say so.
 | "They're clearly in a hurry" | Speed is their call to make, not yours to assume. |
 | "It's only a small addition to the approved scope" | Scope grew — that is precisely what the gate is for. |
 | "Silence means yes" | Silence means absent. Leave `approved:false` and stop (§2). |
+| "They already told me what they want, the spec is a formality" | An answer to a question is not approval of a spec. Write it and ask. |
 
 A skipped gate is legitimate only via a rule above, and it is **recorded in `intake.md`**, so
 a resumed run can see that a human chose it — not infer that one happened.

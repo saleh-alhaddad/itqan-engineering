@@ -44,7 +44,9 @@ Confirm, with evidence, before anything goes out:
 - Config/secrets/migrations for the target environment are ready (secrets via the platform's
   secret store, never in code).
 - Data migrations are backward-compatible (expand → backfill → contract; never rename in
-  place under live traffic).
+  place under live traffic). **Count the destructive statements** (drop, rename, type change,
+  column removal) in the migrations being shipped rather than assuming there are none: a
+  code-only rollback is safe only while every migration is additive, so record which it is.
 - Observability is in place to answer "is it working?" after launch — the key signals and an
   alert on the symptom that matters.
 
@@ -62,7 +64,9 @@ is the internal memory — different audiences, both required.
 ## Step 2 — Write the rollback plan FIRST
 
 Before you ship, write down how to undo it: the flag to flip, the revert commit, the
-migration to reverse, and the signal that says "roll back now." A rollback you design under
+migration to reverse, and the signal that says "roll back now." Name **the data at risk**
+(or state that none is) and **how you will verify the rollback worked**, such as the proving
+commands re-run with the expected pre-release result. A rollback you design under
 pressure is one you get wrong. This is required even for a one-step release.
 
 ## Step 3 — Roll out by risk
@@ -76,10 +80,13 @@ Match the rollout to the blast radius:
 
 ## Step 4 — GO / NO-GO and close-out
 
-Make the call explicitly and record it:
+Make the call explicitly and record it. **Two verdicts, never collapsed:** whether the change
+is fit to *merge* (code quality, tests, review) and whether the system is fit to *deploy to
+production* (observability, rollback path, target environment). They can differ, so when
+they do, record each with its reasons rather than forcing one answer:
 ```
 ## Release decision — <task>
-Decision:  GO | NO-GO
+Decision:  merge GO | NO-GO · production deploy GO | NO-GO
 Evidence:  <verify result> · <review status> · <checklist state> · <CI status on this commit>
 Integration: <merge/PR step + post-merge re-verify on the target branch — a change still
              sitting on its task branch is not shipped (§11)>
