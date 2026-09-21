@@ -26,6 +26,15 @@ route and proceed.
    depends on (§1 workspace · §2 phase ledger · §5 resume sweep · §6 role dial · §7 gates ·
    §8 multi-agent · §12 commit policy · §14 grounding · §15–17 session/big-change/freshness ·
    §18 closing output · §19 data-driven decisions · §20 filesystem access & integrity).
+   **If you cannot read it, stop.** A denied read, a sandbox refusal, or a corporate policy
+   on dot-directories (this suite often installs under `~/.agents/skills/` or `.cursor/`)
+   leaves you with this map and nothing else. Say which path was refused and what it
+   blocks, then offer the two ways out: copy the suite to a readable path, or have the user
+   paste `CONVENTIONS.md` and the sub-skill you need. **Never improvise a phase from the
+   table below** and call it following the skill. A directory listing that returns zero
+   files is a block until proven otherwise: try reading a file you know exists before
+   concluding the folder is empty.
+
 2. **Route the task to the right sub-skill** and follow its `SKILL.md` exactly:
 
 | The user wants… | Follow |

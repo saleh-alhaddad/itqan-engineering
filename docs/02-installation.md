@@ -172,6 +172,35 @@ itqan:engineer "add a health-check endpoint"
 
 Expect a detection report and questions — not instant code. That's the suite working.
 
+## When a managed policy blocks the skill files
+
+On a work machine, an admin policy can deny reads on every path whose folder starts with a
+dot. The default install sits in `~/.agents/skills/itqan/`, so the whole suite goes dark:
+your agent still sees the router `SKILL.md` (editors inline it when you name the skill) but
+cannot open `CONVENTIONS.md` or any of the 12 sub-skills.
+
+**How it looks:** "permission denied" on a read, `restricted by admin policy` from a shell,
+or a directory listing that returns zero files instead of an error. The zero-files case is
+the dangerous one, since nothing announces itself as blocked.
+
+**Fix it properly** — ask whoever manages the policy to allow these, mirroring whatever
+carve-outs already exist:
+
+```
+~/.agents/skills/**
+**/.cursor/skills/**   **/.cursor/rules/**   **/.cursor/agents/**
+```
+
+**Work around it meanwhile** — copy the suite anywhere readable that is not a dot-folder,
+then point your agent at that copy's root `SKILL.md`:
+
+```bash
+cp -R ~/.agents/skills/itqan <your-repo>/tools/itqan
+```
+
+Relative links inside the suite keep working, because every reference is relative to the
+folder itself.
+
 ## Updating
 
 | Installed via | Update with |
