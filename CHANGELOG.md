@@ -3,6 +3,12 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.4] — 2026-09-21
+
+### Changed
+- No install path pipes a downloaded script into a shell any more. The guided installer is fetched to `itqan-install.sh`, read, then run: README, the installation chapter, the FAQ, and the script's own usage header all say so. Piping into a shell executes code the user never saw, which is the opposite of what this suite asks of anyone.
+- The installer's Node-upgrade hint links to the nvm project instead of printing a pipe-to-shell command. The script never downloaded nvm (it only uses a locally installed one), but printing that command made automated audits read it as one.
+
 ## [0.0.3] — 2026-09-21
 
 ### Added
@@ -27,6 +33,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.4]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/saleh-alhaddad/itqan-engineering/releases/tag/v0.0.1

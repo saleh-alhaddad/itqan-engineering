@@ -5,7 +5,8 @@
 # needs no Node at all.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh -o itqan-install.sh
+#   (read it, then) bash itqan-install.sh
 #   ./install.sh            # from a clone
 set -euo pipefail
 
@@ -16,7 +17,7 @@ AUTO=0
 for a in "$@"; do [ "$a" = "--auto" ] && AUTO=1; done
 
 say()  { printf '%s\n' "$*"; }
-ask()  { # interactive: read the terminal (works for curl|bash via /dev/tty);
+ask()  { # interactive: read the terminal (works when stdin is not the script, via /dev/tty);
          # script-from-file with piped stdin: read the pipe (scripted/CI answers);
          # fully non-interactive: fall back to the default (empty answer)
   local reply=""
@@ -99,7 +100,7 @@ main() {
     esac
   else
     say "No nvm found. Upgrade options:"
-    say "  - nvm:      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash   (then: nvm install 22)"
+    say "  - nvm:      install it from https://github.com/nvm-sh/nvm (then: nvm install 22)"
     say "  - Homebrew: brew install node@22"
     say "  - Direct:   https://nodejs.org"
   fi

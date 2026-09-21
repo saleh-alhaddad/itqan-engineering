@@ -7,7 +7,7 @@
 **`SyntaxError: Unexpected reserved word` when running `npx skills add`?**
 Your Node is too old (needs ≥ 22.20; the `EBADENGINE` warnings above the error say so).
 Fix: `nvm install 22 && nvm use 22`, or use the guided installer which handles it:
-`curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh | bash`
+download `https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh`, read it, then run it with `bash`
 
 **How do I update / remove?** See [chapter 2](02-installation.md#updating) — per-platform
 commands for both. Removal never touches your projects' `engineering/` folders.
