@@ -146,8 +146,8 @@ What you type depends on the install:
 - **Nothing is lost when a session dies:** every run journals its start, each resume, every
   decision, and where it stopped into the task's `log.md`, *before* the step it describes.
   The next run reads that first and knows exactly what was in flight.
-- **It learns how you decide, on your terms:** only from choices *you* made, kept where you
-  choose or turned off, and applied at the level you set per tier: ask, suggest your own
+- **It learns how you decide, on your terms:** only from choices *you* made, kept in a
+  private file in your home folder (never in a repo your team shares) or turned off, and applied at the level you set per tier: ask, suggest your own
   past answer, or decide and tell you. It never decides an approval, a commit, a push, a
   security waiver, or anything irreversible, whatever the setting.
 - **Grounded, not guessed** — unknown facts are verified with citations, asked, or labeled

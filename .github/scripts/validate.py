@@ -412,6 +412,9 @@ def check_judgment_floor_is_intact() -> None:
         "security waivers": r"waiving a security finding",
         "irreversible actions": r"destructive or irreversible",
         "scope changes": r"changing scope",
+        "skipping a phase or routing a change as small": r"skipping or adding a phase or gate",
+        "run-mode consent (agents, loop, commits)": r"run-mode consent",
+        "judgment's own controls": r"judgment's own controls",
     }
     for name, pattern in required.items():
         if not re.search(pattern, floor.group(1)):

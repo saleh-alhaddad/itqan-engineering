@@ -42,7 +42,6 @@ engineering/
 ├── decisions.md        # cross-task decisions and their WHY (ADR-style)
 ├── index.md            # ordered registry of every task and its live status
 ├── onboarding.md       # shared codebase onboarding (written by learn, when run)
-├── judgment.md         # how the user decides (§4.1), only if they chose to keep it here
 ├── changelog/          # per-feature dated change history, size-rotated (§13.1)
 │   └── <feature>/<feature>-NNN.md
 └── tasks/
@@ -69,8 +68,9 @@ engineering/
 place above; a file not listed is a bug, whichever skill wrote it. Raw proof (test output,
 probe results, logs) goes in the task's `evidence/`, never beside the artifacts. Scratch
 work goes to the system temp directory and is deleted before the turn ends. Outside the
-workspace, a run writes only the code and tests its task calls for: no notes, probes, or
-helper files in the repo.
+workspace, a run writes only the code and tests its task calls for, plus two personal
+folders the user agreed to: the judgment file in their home directory (§4.1) and `learn`'s
+`learning/` folder. No notes, probes, or helper files in the repo.
 
 **Shared workspaces collide on the number, and on `index.md`** — on a committed workspace
 (§20.1) two people can allocate the same `0007-…` and both append a row. Prevent it:
@@ -213,12 +213,14 @@ ledger lying (§20.2).
 ```
 ### <ISO-8601 date-time> · <skill> · START | RESUME | DECISION | STOP
 <one to five lines: what, why, and what happens next>
-By:   <user | run | rule J-<n>>          (DECISION entries only)
+By:   <user (<vcs identity>) | run | rule J-<n>>   (DECISION entries only)
 Kind: <style | practice | architecture> · <topic> · <scope>   (when By: user)
 ```
 
 `By:` is not decoration. It is the only thing that separates a choice the user made from one
-the run made, and judgment (§4.1) learns from the first kind alone. A DECISION without it
+the run made, and judgment (§4.1) learns from the first kind alone. The identity is the
+version-control author email of the person at the keyboard (`git config user.email`), so in a
+shared workspace one person's choices never train another's rules. A DECISION without it
 cannot be learned from and cannot be audited.
 
 **Rules that keep it trustworthy**
@@ -243,8 +245,9 @@ exact shape, so decisions are traceable and never re-litigated:
 ### Q<n> · <phase> · <ISO-8601 date>
 Question: <the question asked>
 My guess: <the best-guess answer offered alongside the question>
-Answer:   <what the user chose>
+Answer:   <what the user chose, or "deferred (<the guess>)" when they only accepted it>
 Locks:    <the decision this fixes for the rest of the run>
+Kind:     <tier> · <topic> · <scope>   (when the answer is a learnable choice, §4.1)
 ```
 
 **Record the decision, not the value.** `intake.md` travels with the workspace and may be
@@ -303,9 +306,8 @@ Agent access:    <how the agent writes to engineering/ — direct | approval-car
 Trivial changes: <new branch always (default) | may go direct on current branch>
 Commit attribution: <none (default — the message describes the change and nothing else) |
                   the exact trailer the org's policy requires (§12)>
-Judgment at:     <~/itqan/judgment.md | engineering/judgment.md | off; asked once (§4.1)>
 Preferences:     <free-form notes on how the user likes to work. A choice that recurs is
-                  learned as a judgment rule (§4.1), not added here>
+                  learned as a judgment rule in the user's own file (§4.1), never here>
 ```
 
 **`standards.md`** — how this codebase is written:
@@ -392,30 +394,48 @@ decides, so a question they have answered the same way again and again stops bei
 and the suite's suggestions start sounding like them. It is learned only from their own
 decisions, applied only at the level they allow, and every use of it is written down.
 
-**Where it lives is asked once, and "off" is a real answer.** It describes a person, not a
-codebase, so on §4's axis it sits beside `profile.md`, never in `standards.md`. Ask at
-setup, naming the consequence as §20.1 does:
+**It is always personal, and "off" is a real answer.** Judgment describes one person, so it
+lives in one place only: `itqan/judgment.md` in **that user's home directory**, resolved to
+an absolute path when used (never a literal `~`, which file tools and some shells do not
+expand). It is never kept in `engineering/`, never in `profile.md`, and never in anything
+a team shares: a teammate's run must neither apply your rules nor feed its decisions into
+them. The choice itself is recorded in that file's header (`Judgment: on | off`), so it
+follows the person and not the repo. A rule meant for one project says so in its `Scope`.
+
+**First use.** When the file does not exist, ask once, naming the consequence:
 ```
-1) ~/itqan/judgment.md       personal, follows you across every project (suggested)
-2) engineering/judgment.md   this project only, visible to whoever sees the workspace
-3) off                       do not learn from my decisions
+Should I learn how you decide, from choices you make yourself?
+1) yes   rules kept in <home>/itqan/judgment.md, private to you, shown to you before use
+2) no    nothing is learned; ask again only if you raise it
 ```
-Record the answer as `Judgment at:` in `profile.md`. The suggested path avoids a dot-folder
-on purpose: managed machines often block reads there (§1's note on managed policies). With
-`off`, nothing in this section runs, and nothing is harvested later without asking again.
+Either answer writes the file, with `Judgment: on` or `off`, and `Owner:` set to the user's
+version-control identity. The path avoids a dot-folder on
+purpose, since managed machines often block reads there. **Probe the write as §20.1 does**:
+if the sandbox or a policy refuses it, judgment is off for this run, and you say so in one
+line. Never write it anywhere else instead. Only `engineer` asks this question. Any other
+skill that finds no file, or finds `off`, runs with judgment off and says nothing.
 
 **The only evidence is the user's own decisions.** A decision counts when its journal entry
-says `By: user` (§2.1), or when it is an answer the user gave in `intake.md` (§3). A decision
+says `By: user` with **this file's `Owner:` identity** (§2.1), or when the owner gave it as an
+answer in `intake.md` (§3). A teammate's decisions in a shared workspace are theirs, not
+evidence here; an entry with no identity counts only in a workspace nobody else uses. A decision
 the run made, or one a judgment rule made, **never** counts: a system that learns from its
-own output talks itself into habits nobody chose. A user overriding a rule is a user
-decision, and it counts against that rule.
+own output talks itself into habits nobody chose. For the same reason, **an answer that only
+accepts a guess** ("fine", "your call", "go with that"), whether the run's own or a rule's,
+is recorded as `Answer: deferred (<the guess>)` and never counted; its journal entry reads
+`By: user (<identity>) · deferred`, which neither counts as evidence nor refreshes any rule's
+`Last used`. A user overriding a rule is a user decision, and it counts against that rule.
 
 **Each decision counts once.** A journal entry that points at an intake answer (`see intake
-Q3`) is that answer, not a second one. When you cite evidence, add the repo and task you
-read it from; the entry itself does not carry them.
+Q3`) is that answer, not a second one. A correction entry (§2.1) replaces the entry it
+corrects, `Kind:` included, and is cited by the original entry's time. The run may correct a
+`Kind:` only toward a **stricter** tier; moving a decision to a looser tier lowers the bar it
+must clear, so only the user may do that. A deferred entry carries no `Kind:`: it is never
+counted. When citing evidence, add the repo and task it was
+read from; the entry itself does not carry them.
 
 **Decisions are grouped by what they answer.** Every learnable decision carries `Kind:
-<tier> · <topic> · <scope>` (§2.1). The **topic** names the question (`db column naming`,
+<tier> · <topic> · <scope>` (§2.1, §3). The **topic** names the question (`db column naming`,
 `queue for background jobs`), and it is what groups decisions: two decisions with the same
 tier and topic answer the same question, and "none chose otherwise" is checked within that
 group. Reuse an existing rule's topic word for word when the question is the same; a new
@@ -427,8 +447,12 @@ scope, widened only to what every piece of evidence shares.
 | Tier | Covers | Starts at | Decisions needed |
 |---|---|---|---|
 | `style` | naming, file and module layout, test structure, formatting no linter settles | suggest | 3 |
-| `practice` | error handling, patterns, library choice, testing approach, how the user works | suggest | 4 |
-| `architecture` | service boundaries, data model, storage, API shape, infrastructure | suggest | 5 |
+| `practice` | error handling, code patterns, in-code libraries, testing approach | suggest | 4 |
+| `architecture` | service boundaries, data model, storage, datastores, queues, API shape, infrastructure | suggest | 5 |
+
+**When a decision fits two tiers, it takes the stricter one.** Anything that chooses where
+data lives or how services talk is `architecture`, even when it looks like picking a
+library: Postgres over DynamoDB is a storage decision, not a dependency.
 
 - **ask** · asked as today: §3's `My guess:` is the run's own, and never presented as the
   user's.
@@ -445,18 +469,28 @@ A scope that reads wider than its evidence (`AWS-hosted backend services`, learn
 Node services) covers a Python service on paper and not in fact; that case drops to `suggest`.
 A case outside the scope is not covered at all.
 
+**The codebase outranks the person.** A rule is a personal habit; `standards.md` (§4) is how
+*this* codebase is written. When they disagree (your rule says camelCase columns, this repo
+uses snake_case), the repo wins: follow the standard as `construct` would, apply nothing from
+the rule, and say in one line which standard set it aside, so the user can narrow its scope.
+Following a standard is the run's decision, not the user's, so it never counts against the
+rule.
+
 **Never decided by judgment, whatever the dial says:**
 - approving a spec or a plan, or the GO/NO-GO (§7)
+- skipping or adding a phase or gate, or routing a change as small (§6.1, §7)
 - committing, pushing, or any outward-facing write (§10, §12)
+- the run-mode consent questions: agents, loop, and commit consent (§8, §12)
 - accepting or waiving a security finding
 - anything destructive or irreversible: deleted data, a destructive migration, a force push
 - changing scope: adding or dropping a requirement
+- judgment's own controls: a tier's level, and confirming, narrowing, or reviving a rule
 
 The floor covers **whether and when** these happen, never their form: whether to push is the
 user's call every time, while the shape of a commit message can be a `style` rule. These are
-decisions of responsibility, not of taste. Judgment may not even pre-fill them,
-and a pattern in one of them **never becomes a candidate**, however often it repeats: that a
-user always approves specs unchanged is not a preference to automate.
+decisions of responsibility, not of taste. Judgment may not even pre-fill them, and a pattern
+in one of them **never becomes a candidate**, however often it repeats: that a user always
+approves specs unchanged, or always says "treat it as small", is not a preference to automate.
 
 **A rule's life**
 1. **Candidate** · at least the tier's number of user decisions on the same tier and topic
@@ -482,10 +516,13 @@ user always approves specs unchanged is not a preference to automate.
    appears in the harvest list for information, and only the user's yes revives it.
 5. **Stale** · `Last used` and `Last confirmed` both older than 180 days. Not a `Status`
    value: it is read from those two dates each time. A stale rule is treated as `suggest`
-   until the user re-confirms it, which needs a yes, not new evidence.
+   until the user re-confirms it at harvest, which needs a yes, not new evidence. A
+   suggestion made while stale does **not** update `Last used`, so a stale rule can never
+   refresh itself.
 
-**File shape.** `judgment.md` opens with the `Autonomy` table (each tier's level) and a
-`Last harvest:` date, then one block per rule:
+**File shape.** `judgment.md` opens with `Judgment: on | off`, `Owner: <identity>`, the
+`Autonomy` table (each tier's level), a `Harvested` list of the `repo:task` ids already read,
+and a `History` list of dated one-line entries for every change made outside a task. Then one block per rule:
 ```
 ### J-<n> · <tier> · <topic>
 Rule:           <what the user does, stated as a decision>
@@ -494,33 +531,49 @@ Evidence:       <repo:task intake Q<n> | repo:task log <date-time>, one per deci
 Held:           <count> · contradicted <count>
 Status:         candidate | confirmed | declined | contradicted | retired
 Last confirmed: <YYYY-MM-DD>
-Last used:      <YYYY-MM-DD, the last time it suggested or decided anything>
+Last used:      <YYYY-MM-DD, the last time it suggested or decided while not stale>
 ```
 
-**Applying a rule, carefully.** Before asking a question or journaling a DECISION, look for a
-`confirmed` or `contradicted` rule of the same tier and topic whose scope covers this case.
-- **Say in one line why it covers this case.** If you cannot, it does not apply: ask.
+**A file that will not parse is quarantined, never rewritten.** Rename it to
+`judgment.md.corrupt`, run with judgment off, and tell the user: its declined and retired
+history is the record of what they already said no to, and rebuilding it by guess would
+re-ask all of it (§20.2 treats a broken ledger the same way). While a `.corrupt` file sits
+there, **do not ask the first-use question** or start a fresh file: stay off and remind the
+user once per run, until they repair it or say to discard it.
+
+**Applying a rule, carefully.** Before asking a question or journaling a DECISION:
+- **Is the case itself on the floor?** Then ask, whatever any rule says, and pre-fill nothing.
+- **Does `standards.md` settle it?** Then follow the standard and name the rule it set aside.
+- Look for a `confirmed` or `contradicted` rule of the same tier and topic whose scope covers
+  this case, and **say in one line why it covers it.** If you cannot, it does not apply: ask.
 - **`contradicted` or stale** · suggest at most, whatever the tier.
 - **Two rules pointing different ways:** apply neither; ask, naming both.
 - **Never chain rules** into a decision no single rule states. A rule answers the question it
   was learned from, not its neighbours.
 - **A question the user has never answered is always asked.**
-- **Update `Last used`** whenever a rule suggests or decides.
+- **Update `Last used`** whenever a rule that is not stale suggests or decides.
 
-**Harvest** runs at close-out (§13) and whenever the user asks ("learn from my decisions").
-It reads each task closed since `Last harvest:` (by when the task closed, not by entry date),
-from that task's own `log.md` and `intake.md`, so every citation names its task. It takes
-the `By: user` decisions once each, groups them by tier and topic, updates `Held` and
-`contradicted` on existing rules, sets `Last used` from any `By: rule` entries, writes new
-candidates, and flags stale rules. Then it shows the user one short list: new
-candidates, contradictions awaiting an answer, and stale rules. Nothing becomes a rule
-without a yes. It ends by setting `Last harvest:` to today and journaling what changed: in
-the closing task's `log.md` at close-out, or on request in the open task's `log.md`, or,
-with no task open, as a dated line under `Last harvest:` in `judgment.md` itself.
+**Harvest** takes every finished task not yet harvested. A task is finished when its
+`index.md` status is terminal (§1), and harvested once its `repo:task` id is in the file's
+`Harvested` list, so no date window can skip a task or count one twice, and a teammate's
+harvest never marks a task off for you. It never writes to the shared workspace's ledger.
+With judgment off, nothing is harvested or marked. **Nothing about the user's rules is ever
+written into the shared workspace**: not a candidate, not a count, not a change. It runs at
+close-out (§13), whichever skill closed the task, and at the start of the next `engineer`
+run in any workspace holding a finished, unharvested task; also whenever the user asks
+("learn from my decisions"). From each such task's own `log.md` and `intake.md` it takes the
+`By: user` decisions once each, skips deferred answers, groups them by tier and topic,
+updates `Held` and `contradicted` on existing rules, sets `Last used` from `By: rule`
+entries, writes new candidates, and flags stale rules. Then it shows the user one short
+list: new candidates, contradictions awaiting an answer, stale rules, and any retirement.
+Nothing becomes a rule without a yes. It adds each task to `Harvested` and records what
+changed in the file's own `History`. The task's `log.md` may note only that a harvest ran,
+never what it found.
 
 **The user can always see and steer it** through `engineer`: *"show my judgment"*, *"set
-style to decide"*, *"forget J-4"*, *"why did you decide that?"*. Each change is journaled as a
-user DECISION. `judgment.md` holds distilled rules only: no source, no secrets, no raw data
+style to decide"*, *"forget J-4"*, *"why did you decide that?"*. Each change is journaled as
+a user DECISION in the file's own `History`, never in a shared task's `log.md`: a teammate
+reading the workspace must not learn how your rules changed. `judgment.md` holds distilled rules only: no source, no secrets, no raw data
 (§1, §3).
 
 ---
@@ -1011,7 +1064,7 @@ Result:      <post-ship: did the change work? the spec's success metric read bac
 Follow-ups:  <known gaps, deferred items, TODOs noted but not done>
 ```
 
-Then run the **judgment harvest** (§4.1), unless `Judgment at:` is `off`: new candidates,
+Then run the **judgment harvest** (§4.1), unless the user's judgment file says `off`: new candidates,
 contradictions, and stale rules go to the user as one short list, and only a yes changes a
 rule. The task is not closed until that list has been shown or there was nothing on it.
 

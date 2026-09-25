@@ -46,9 +46,10 @@ first, single-statement queries, aggregates-only in any saved artifact. It never
 production data, ever.
 
 **Does it learn from me? What does it keep, and where?**
-Only if you let it. On first run it asks where your *judgment* file lives: a personal folder
-outside every repo (`~/itqan/judgment.md`), this project's workspace, or **off**. It learns
-only from choices you made yourself, never from its own, and a pattern becomes a rule only
+Only if you let it. On first run it asks whether to learn at all. If yes, your *judgment*
+file lives in your home folder (`itqan/judgment.md`), never in a repo, so teammates never
+share or feed your rules. It learns only from choices you made yourself: never from its
+own, and never from a reply like "fine, your call", and a pattern becomes a rule only
 after you have chosen the same way 3–5 times and said yes to it. Every tier starts at
 *suggest*: you are still asked, but its guess is your own past answer. Say *"show my
 judgment"* to see it, *"forget J-4"* to drop a rule, or *"stop learning"* to turn it off.

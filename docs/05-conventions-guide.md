@@ -23,7 +23,7 @@ full text in [CONVENTIONS.md](https://github.com/saleh-alhaddad/itqan-engineerin
   field would change when a *different person* runs the suite on the same repo it's profile;
   if it would change when the *code* changes it's standards.
 - **§4.1**: **judgment**, how *you* decide, learned only from choices you made (never from
-  the run's own or from a rule's), kept where you choose or turned off. Three tiers (style,
+  the run's own, a rule's, or a "fine, your call"), kept privately in your home folder or turned off. Three tiers (style,
   practice, architecture), each on a dial you set: `ask`, `suggest` (its guess is your past
   answer, cited), or `decide` (it acts and tells you, one word to undo). A rule needs 3–5
   consistent decisions and your yes before it exists. It never decides a spec or plan
