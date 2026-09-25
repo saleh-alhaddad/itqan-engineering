@@ -17,13 +17,14 @@ Read [ui-craft.md](../../references/disciplines/ui-craft.md) — the universal, 
 UI reference — and the matching discipline pack ([frontend](../../references/disciplines/frontend.md)
 or [mobile](../../references/disciplines/mobile.md)). Read [CONVENTIONS.md](../../CONVENTIONS.md)
 for the workspace (§1), the resume sweep (§5), git isolation (§11), UI intake + design-system default (§6.2), integrations (§10), and
-grounding — no guessing (§14), and the ledger (§2), workspace integrity (§20).
+grounding — no guessing (§14), and the ledger (§2), judgment (§4.1), workspace integrity (§20).
 
 **Journal every run (§2.1).** The first write of the run, once the task folder is resolved
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
 `state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
 a STOP entry before every reply that ends the turn. Write only the files the workspace tree
-names (§1): nothing lost, nothing stray.
+names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
+user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
 ## What this skill does (three modes)
 

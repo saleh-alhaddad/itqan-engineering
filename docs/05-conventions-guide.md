@@ -22,8 +22,15 @@ full text in [CONVENTIONS.md](https://github.com/saleh-alhaddad/itqan-engineerin
   conventions, branch/commit format) · `decisions.md` (ADRs with the *why*). The axis: if a
   field would change when a *different person* runs the suite on the same repo it's profile;
   if it would change when the *code* changes it's standards.
+- **§4.1**: **judgment**, how *you* decide, learned only from choices you made (never from
+  the run's own or from a rule's), kept where you choose or turned off. Three tiers (style,
+  practice, architecture), each on a dial you set: `ask`, `suggest` (its guess is your past
+  answer, cited), or `decide` (it acts and tells you, one word to undo). A rule needs 3–5
+  consistent decisions and your yes before it exists. It never decides a spec or plan
+  approval, a GO/NO-GO, a commit or push, a security waiver, a scope change, or anything
+  irreversible.
 
-## Resuming & judgment (§5–§7)
+## Resuming, role & gates (§5–§7)
 
 - **§5** — the resume sweep: walk phases backward, re-prove everything marked done (tests
   re-run *now*; approvals verified), repair what's invalid, resume at the first unproven step.

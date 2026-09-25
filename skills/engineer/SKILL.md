@@ -26,7 +26,8 @@ data-driven decisions (§19), and filesystem access & workspace integrity (§20)
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
 `state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
 a STOP entry before every reply that ends the turn. Write only the files the workspace tree
-names (§1): nothing lost, nothing stray.
+names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
+user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
 **Grounding (§14) applies throughout:** never let a run — or a worker — present a guess as
 fact. When something isn't known, verify (code/docs/web, cited), ask, or label it a
@@ -50,7 +51,8 @@ CONSTRUCT's build).
    · which repos are *implement* vs *review-only* · implement scope (all/ask/selected) ·
    **where `engineering/` lives and who can see it** — the location *and* the exposure
    (committed / gitignored / outside the repo), asked as §20.1's options rather than as a path
-   to type → `profile.md`; branch & commit format → `standards.md`. Asked once, honored
+   to type → `profile.md`; **where judgment lives, or off** (§4.1's three options) →
+   `profile.md`; branch & commit format → `standards.md`. Asked once, honored
    forever. On later multi-repo tasks with scope
    `ask`, confirm **which repo this task implements in** before writing anything.
 
@@ -63,7 +65,8 @@ CONSTRUCT's build).
    `templates/`, see `skills/_shared/workspace-bootstrap.md`) — then run the **workspace
    integrity check** (§20.2), repairing any required file that's missing. Create the
    workspace at the recorded path if absent. Recall
-   memory: read `profile.md`, `standards.md`, `decisions.md` (§4). If they are missing,
+   memory: read `profile.md`, `standards.md`, `decisions.md` (§4), and the judgment file at
+   `Judgment at:` unless it is `off` (§4.1). If they are missing,
    this is a new project — you will create them after the first meaningful work.
 
 3. **Scan the codebase and print a detection report.** Don't just read dependency files —
@@ -233,7 +236,24 @@ AI (§12). If the run stopped **before** release, also write the task's `summary
 now (§13) — release only writes it on a GO, and a stopped run must not leave the next session
 without one. Write memory back (§4): append durable decisions and their *why*, confirmed
 standards, and gotchas to `decisions.md` / `standards.md` / `profile.md`. Update `index.md`
-with the task's final status. Distilled facts only — never the user's source.
+with the task's final status. Distilled facts only — never the user's source. Then run
+the judgment harvest (§4.1, §13) and show its short list before calling the task closed.
+
+## Judgment requests
+
+When the user asks about or steers what the suite has learned about how they decide, handle it
+here, journal each change as a `By: user` DECISION, and never touch the floor (§4.1):
+
+| The user says | Do |
+|---|---|
+| *"show my judgment"* | the `Autonomy` table, then confirmed rules with their evidence counts; candidates and stale rules after, labelled as such |
+| *"set style to decide"* | change that tier's level; for `architecture`, restate that exact scope match is required |
+| *"forget J-4"* / *"that rule is wrong"* | retire it with their reason; never delete the entry |
+| *"why did you decide that?"* | the rule, its evidence entries, and why this case matched its scope |
+| *"learn from my decisions"* | run the harvest now, across the tasks they name or all of them |
+| *"stop learning"* | set `Judgment at:` to `off`; ask whether to keep or delete the existing file |
+
+If `Judgment at:` is not recorded yet, ask §4.1's location question first.
 
 ## Composition
 

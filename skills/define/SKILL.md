@@ -22,7 +22,8 @@ constraints, and decisions already stated instead of re-asking them.
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
 `state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
 a STOP entry before every reply that ends the turn. Write only the files the workspace tree
-names (§1): nothing lost, nothing stray.
+names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
+user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
 **If a tool is connected and the user references it** (§10): read the ticket/doc from an
 issue tracker or docs (Jira, Linear, Confluence, GitHub Issues) as the requirement source

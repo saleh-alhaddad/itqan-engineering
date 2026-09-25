@@ -45,6 +45,16 @@ Reads only, and only safely: read-only role on a replica, statement timeout, `EX
 first, single-statement queries, aggregates-only in any saved artifact. It never writes to
 production data, ever.
 
+**Does it learn from me? What does it keep, and where?**
+Only if you let it. On first run it asks where your *judgment* file lives: a personal folder
+outside every repo (`~/itqan/judgment.md`), this project's workspace, or **off**. It learns
+only from choices you made yourself, never from its own, and a pattern becomes a rule only
+after you have chosen the same way 3–5 times and said yes to it. Every tier starts at
+*suggest*: you are still asked, but its guess is your own past answer. Say *"show my
+judgment"* to see it, *"forget J-4"* to drop a rule, or *"stop learning"* to turn it off.
+It holds distilled rules only, no code or secrets, and it never decides an approval, a
+commit, a push, a security waiver, or anything irreversible, whatever you set.
+
 **Does it work without subagents / without a shell?**
 Yes — every capability has a stated degrade: phases run inline; reviews become fresh-eyes
 self-passes; verification without a shell honestly reports "cannot verify" instead of faking.

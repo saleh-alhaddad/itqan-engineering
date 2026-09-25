@@ -23,7 +23,7 @@ route and proceed.
 ## How to work
 
 1. **Read [CONVENTIONS.md](CONVENTIONS.md) first** — the shared rules every sub-skill
-   depends on (§1 workspace · §2 phase ledger · §5 resume sweep · §6 role dial · §7 gates ·
+   depends on (§1 workspace · §2 phase ledger · §4 memory & judgment · §5 resume sweep · §6 role dial · §7 gates ·
    §8 multi-agent · §12 commit policy · §14 grounding · §15–17 session/big-change/freshness ·
    §18 closing output · §19 data-driven decisions · §20 filesystem access & integrity).
    **If you cannot read it, stop.** A denied read, a sandbox refusal, or a corporate policy
@@ -51,6 +51,7 @@ route and proceed.
 | UI/UX design or a UI audit (web/mobile) | [skills/design/SKILL.md](skills/design/SKILL.md) |
 | A learning roadmap, or onboarding onto this codebase | [skills/learn/SKILL.md](skills/learn/SKILL.md) |
 | A whole-app health analysis / feature audit by an expert panel | [skills/assess/SKILL.md](skills/assess/SKILL.md) |
+| To see or steer what the suite has learned about how they decide | [skills/engineer/SKILL.md](skills/engineer/SKILL.md), its *Judgment requests* |
 
 3. **Discipline packs** (auto-selected by detected stack) live in
    [references/disciplines/](references/disciplines/README.md) — stack packs (backend,
@@ -66,6 +67,8 @@ route and proceed.
 - Nothing is lost: every run journals its START, RESUME, each DECISION, and a STOP before
   every reply into the task's `log.md`, and writes only the files the workspace tree names
   (§1, §2.1).
+- It learns how you decide only from choices you made, applies that only as far as you allow,
+  and never decides a gate, a commit, a push, a security waiver, or anything irreversible (§4.1).
 - Never commit or push without the user's approval; commit messages never mention the AI (§12).
 - Don't guess — verify (cited), ask, or label a suggestion (§14); check the web with today's
   date for time-sensitive facts (§17).

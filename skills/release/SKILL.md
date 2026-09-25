@@ -21,7 +21,8 @@ evidence are the output; no trailing wish-list), data-driven decisions (§19), a
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
 `state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
 a STOP entry before every reply that ends the turn. Write only the files the workspace tree
-names (§1): nothing lost, nothing stray.
+names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
+user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
 **Connected delivery tools** (§10): if a VCS/chat/docs tool is connected, offer to handle
 delivery through it — open the PR, post the release note to Slack, update the Jira ticket,
@@ -106,7 +107,8 @@ confirmed (§2). On GO and a healthy rollout: **write the close-out `summary.md`
 handoff doc so the next session/AI can pick up cold (outcome, key files, decisions, how to
 run, follow-ups). Then update `index.md` to shipped, and write memory back (§4) —
 durable decisions and their *why*, confirmed standards, gotchas. Distilled facts only, never
-the user's source. The task is now done, with evidence at every gate.
+the user's source. Run the judgment harvest (§4.1) and show its list. The task is now done,
+with evidence at every gate.
 
 - **Non-functional criteria met** where the spec set them: performance/load numbers,
   accessibility on user-facing surfaces, localization — a GO with unmet NFRs is a NO-GO.

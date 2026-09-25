@@ -15,7 +15,7 @@ real hardening review deserves its own depth.
 
 Read [references/disciplines/security.md](../../references/disciplines/security.md) — the
 shared security reference (STRIDE, OWASP Top 10 + LLM Top 10, secrets, abuse cases). Read
-[CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), the resume sweep (§5), git isolation (§11), multi-agent
+[CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), judgment (§4.1), the resume sweep (§5), git isolation (§11), multi-agent
 rules (§8), grounding (§14), and freshness (§17 — check current CVEs/advisories against
 today's date), and workspace integrity (§20).
 
@@ -23,7 +23,8 @@ today's date), and workspace integrity (§20).
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
 `state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
 a STOP entry before every reply that ends the turn. Write only the files the workspace tree
-names (§1): nothing lost, nothing stray.
+names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
+user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
 ## Step 1 — Scope & threat model
 

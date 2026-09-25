@@ -3,6 +3,24 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.6] — 2026-09-25
+
+### Added
+- **Judgment (CONVENTIONS §4.1): the suite learns how its user decides.** Learned only from decisions the journal marks `By: user` or from the user's own intake answers; a decision the run or a rule made never counts, so the suite cannot learn from its own output. Kept where the user chooses (a personal `~/itqan/judgment.md`, the project workspace) or turned off.
+- Three tiers (`style`, `practice`, `architecture`) needing 3, 4 and 5 consistent decisions, each on a dial the user sets: `ask`, `suggest` (the guess in the question is the user's own past answer, cited), or `decide` (the run acts, journals `By: rule J-<n>`, and reports it with a one-word undo). Every tier starts at `suggest`; only the user raises one.
+- A floor judgment can never decide or pre-fill, and never learn from: spec and plan approval, GO/NO-GO, commits and pushes, outward-facing writes, security waivers, anything destructive or irreversible, and scope changes.
+- A rule's life: candidate, confirmed only by the user's yes, contradicted (capped at `suggest`), retired (kept with its reason), and stale after 180 days unused and unconfirmed. The harvest runs at close-out and on request.
+- `engineer` handles *show my judgment*, *set <tier> to decide*, *forget J-<n>*, *why did you decide that?*, *learn from my decisions*, and *stop learning*.
+- Journal DECISION entries carry `By:` (user, run, or rule) and, when the user decided, `Kind: <tier> · <topic> · <scope>`.
+- Validator guard: §4.1's floor must still name every excluded decision, proven to fail when one line is removed. Four routing evals, including a guard against confusing *learn from my decisions* with the `learn` skill.
+
+### Verified
+- Three blind runs by fresh agents given only the rule text and fixtures with planted traps: decisions made by the run and by rules, a floor decision repeated five times, an intake answer cited twice, contradictions, stale, declined and retired rules, and architecture cases inside, outside, and nominally inside a rule's scope.
+- Run 1 applied everything correctly but by assumption in 16 places; §4.1 was rewritten so decisions group by tier *and topic*, each decision counts once, floor topics never become candidates, and every rule state is explicit.
+- Run 2 got 11 of 11 harvest checks and 6 of 7 applications. The miss was the riskiest kind: it *decided* an architecture choice for a Python service from a rule learned only on Node services, because "exact match" was measured against the scope's wording. Exactness is now measured against the evidence.
+- Run 3, on the revised text: 7 of 7, including that case (now `suggest`). Its three remaining ambiguities (J-numbering, candidate order, wording of a guess drawn from a candidate) were closed.
+- Routing: 6 of 6, including the four new cases.
+
 ## [0.0.5] — 2026-09-25
 
 ### Added
@@ -45,6 +63,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.6]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.2...v0.0.3

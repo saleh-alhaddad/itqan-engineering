@@ -12,13 +12,14 @@ Judge the application the way a seasoned leadership review would: several expert
 honest report. Read [CONVENTIONS.md](../../CONVENTIONS.md) — especially the workspace and
 changelog (§1, §13.1 — the app's memory is your primary evidence), the role dial (§6), the resume sweep (§5), git isolation (§11),
 gates (§7), multi-agent rules (§8), platform adapters (§9), grounding (§14), freshness
-(§17), closing output (§18), and data-driven decisions (§19), and the ledger (§2), workspace integrity (§20).
+(§17), closing output (§18), and data-driven decisions (§19), and the ledger (§2), judgment (§4.1), workspace integrity (§20).
 
 **Journal every run (§2.1).** The first write of the run, once the task folder is resolved
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
 `state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
 a STOP entry before every reply that ends the turn. Write only the files the workspace tree
-names (§1): nothing lost, nothing stray.
+names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
+user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
 **Boundary with `discover`:** `assess` judges the features that exist; when its conclusion
 is "we need net-new X", hand that to `discover` (or straight to `define` if the user already

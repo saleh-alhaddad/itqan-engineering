@@ -390,6 +390,34 @@ def check_workspace_tree_is_closed() -> None:
         err(f"CONVENTIONS.md: §20.2 requires '{missing}' but §1's closed tree gives it no place")
 
 
+def check_judgment_floor_is_intact() -> None:
+    """§4.1's floor, the decisions judgment may never make, must name every one of them.
+
+    Judgment lets the suite act on a user's past choices without asking. That is safe only
+    because some decisions are excluded outright, whatever the user's autonomy dial says.
+    Dropping one line from that list would quietly let a learned habit approve a spec, push,
+    or waive a security finding, and nothing else in the suite would notice.
+    """
+    conventions = (ROOT / "CONVENTIONS.md").read_text(encoding="utf-8")
+    floor = re.search(r"\*\*Never decided by judgment, whatever the dial says:\*\*\n((?:- .*\n)+)",
+                      conventions)
+    if not floor:
+        err("CONVENTIONS.md: §4.1's 'Never decided by judgment' floor list not found")
+        return
+    required = {
+        "spec or plan approval": r"approving a spec or a plan",
+        "GO/NO-GO": r"GO/NO-GO",
+        "commit and push": r"committing, pushing",
+        "outward-facing writes": r"outward-facing write",
+        "security waivers": r"waiving a security finding",
+        "irreversible actions": r"destructive or irreversible",
+        "scope changes": r"changing scope",
+    }
+    for name, pattern in required.items():
+        if not re.search(pattern, floor.group(1)):
+            err(f"CONVENTIONS.md: §4.1's judgment floor no longer excludes {name}")
+
+
 def main() -> int:
     parsed = check_json_files()
     check_name_consistency(parsed)
@@ -409,12 +437,13 @@ def main() -> int:
     check_enforced_promises_are_documented()
     check_every_skill_journals()
     check_workspace_tree_is_closed()
+    check_judgment_floor_is_intact()
     if ERRORS:
         print(f"FAIL — {len(ERRORS)} problem(s):")
         for e in ERRORS:
             print(f"  ✗ {e}")
         return 1
-    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed.")
+    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact.")
     return 0
 
 
