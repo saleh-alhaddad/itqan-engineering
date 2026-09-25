@@ -15,7 +15,13 @@ afterthought — you make it explicit.
 Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), memory
 (§4), role dial (§6), skip rules (§7), integrations (§10), git isolation (§11), commit
 policy (§12), the close-out summary (§13), closing output (§18 — the GO/NO-GO and its
-evidence are the output; no trailing wish-list), and data-driven decisions (§19).
+evidence are the output; no trailing wish-list), data-driven decisions (§19), and workspace integrity (§20).
+
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
 
 **Connected delivery tools** (§10): if a VCS/chat/docs tool is connected, offer to handle
 delivery through it — open the PR, post the release note to Slack, update the Jira ticket,
@@ -80,7 +86,7 @@ Match the rollout to the blast radius:
 
 ## Step 4 — GO / NO-GO and close-out
 
-Make the call explicitly and record it. **Two verdicts, never collapsed:** whether the change
+Make the call explicitly and record it in `release.md`. **Two verdicts, never collapsed:** whether the change
 is fit to *merge* (code quality, tests, review) and whether the system is fit to *deploy to
 production* (observability, rollback path, target environment). They can differ, so when
 they do, record each with its reasons rather than forcing one answer:
@@ -122,7 +128,7 @@ task; an incident that taught nothing will repeat.
 ## Composition
 
 - **Consumes:** the reviewed change, `verify` evidence, `review.md`, project memory.
-- **Produces:** the release decision + rollback record, the close-out **`summary.md`** on a
+- **Produces:** `release.md` (checklist evidence, rollback plan, decision), the close-out **`summary.md`** on a
   GO (§13), updated `index.md` and memory; `release` marked done+validated in the ledger.
 - **Hands off to:** `engineer` (which pulls the next task in loop mode).
 - **Receives from:** `inspect` (cleared change), `harden` (no open Critical), or `engineer`.

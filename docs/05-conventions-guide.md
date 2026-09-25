@@ -8,9 +8,13 @@ full text in [CONVENTIONS.md](https://github.com/saleh-alhaddad/itqan-engineerin
 ## The workspace & memory (§1–§4)
 
 - **§1** — the `engineering/` folder: numbered task folders, an index, and a bootstrap rule
-  so *any* skill invoked directly still has a defined place to write.
+  so *any* skill invoked directly still has a defined place to write. The tree is **closed**:
+  a file it does not name is a bug, and raw proof goes only in a task's `evidence/`.
 - **§2** — `state.json`, the phase ledger: `status` / `validated` / `approved` per phase.
   The `approved` flag is why a resumed run can't pretend you said yes.
+- **§2.1** — `log.md`, the checkpoint journal. Every run writes a START, a RESUME after
+  the sweep, a DECISION before acting on any choice, and a STOP before every reply — each
+  *before* the step it describes, so a session that dies mid-step leaves its intent on disk.
 - **§3** — every clarifying Q&A saved in one schema, plus task **References** (links/tickets).
 - **§4** — memory, split on one axis: `profile.md` = **how the suite operates here** (your
   role, implement vs review-only repos, workspace path *and* exposure, platform, agent

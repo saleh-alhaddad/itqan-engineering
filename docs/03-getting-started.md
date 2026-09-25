@@ -106,7 +106,7 @@ engineering/
 ├── index.md          ← ordered registry of every task + live status
 ├── decisions.md      ← why token-expiry = 1h (the ADR)
 ├── changelog/password-reset/…  ← the dated change entry
-└── tasks/0001-password-reset/  ← intake · spec · plan · review · summary · state.json
+└── tasks/0001-password-reset/  ← log · intake · spec · plan · verify · review · release · summary · state.json
 ```
 
 `summary.md` ends with an **Operate** runbook (what to watch, how to roll back) and an

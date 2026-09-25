@@ -18,6 +18,12 @@ Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger 
 rule**, which you rely on more than any other skill), large-change safety (§16), workspace integrity (§20), and closing
 output (§18 — report the findings and stop; don't append speculative extras).
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 ## Review the diff with fresh context
 
 **This does not replace your team's code review.** It is a thorough machine pass that finds

@@ -22,6 +22,12 @@ guessing (§14), session scan & capture (§15), large/architectural changes (§1
 freshness (§17), closing output (§18 — end on the result, not a list of maybes),
 data-driven decisions (§19), and filesystem access & workspace integrity (§20). This skill orchestrates those conventions; it does not repeat them.
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 **Grounding (§14) applies throughout:** never let a run — or a worker — present a guess as
 fact. When something isn't known, verify (code/docs/web, cited), ask, or label it a
 suggestion. This is the suite's honesty backbone.
@@ -92,13 +98,13 @@ CONSTRUCT's build).
 
 4. **Find the task.** Determine whether the user is starting something new or resuming.
    - *Resuming* (they said "continue", named an existing task, or `engineering/index.md`
-     has an unfinished task): run the **resume-and-validate sweep** (§5) before any new
-     work. Announce where it picked up and what it re-proved or repaired.
+     has an unfinished task): read the task's `log.md` for where the last run stopped,
+     then run the **resume-and-validate sweep** (§5) before any new work. Announce where it picked up and what it re-proved or repaired.
      **List `tasks/` on disk before trusting `index.md`** — a folder with no row is an
      interrupted task, not an absent one (§20.2), and starting fresh over it interleaves two
      tasks in one tree.
-   - *New task*: create the next `tasks/NNNN-<slug>/` folder, a fresh `state.json`, **an
-     `intake.md`** (§20.2 requires it at creation — start it with the setup answers and the
+   - *New task*: create the next `tasks/NNNN-<slug>/` folder, **`log.md` with its START
+     entry** (§2.1), a fresh `state.json`, **an `intake.md`** (§20.2 requires it at creation — start it with the setup answers and the
      task's `References:`, even when no question has been asked yet), **and the task's
      `index.md` row** (status `todo`) — write the row at creation and update it on
      every phase transition, not only at ship, so a later resume can find the task (§1). For

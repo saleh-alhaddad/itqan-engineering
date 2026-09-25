@@ -63,6 +63,9 @@ route and proceed.
 - Two user-approval gates before code (spec, plan) and GO/NO-GO before ship — recorded in
   the ledger; a resumed run re-proves them (§2, §5, §7).
 - Evidence before claims: run it fresh and read the output before saying "done" (§14).
+- Nothing is lost: every run journals its START, RESUME, each DECISION, and a STOP before
+  every reply into the task's `log.md`, and writes only the files the workspace tree names
+  (§1, §2.1).
 - Never commit or push without the user's approval; commit messages never mention the AI (§12).
 - Don't guess — verify (cited), ask, or label a suggestion (§14); check the web with today's
   date for time-sensitive facts (§17).

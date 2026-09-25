@@ -19,6 +19,12 @@ shared security reference (STRIDE, OWASP Top 10 + LLM Top 10, secrets, abuse cas
 rules (§8), grounding (§14), and freshness (§17 — check current CVEs/advisories against
 today's date), and workspace integrity (§20).
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 ## Step 1 — Scope & threat model
 
 **The iron rule: no finding without a reachable path from an attacker to an asset.** A

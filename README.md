@@ -143,6 +143,9 @@ What you type depends on the install:
   never re-presented unchanged.
 - **Evidence before claims** — tests run *now*, output read, and the count checked: zero
   tests collected is a discovery failure, not a green run.
+- **Nothing is lost when a session dies** — every run journals its start, each resume, every
+  decision, and where it stopped into the task's `log.md`, *before* the step it describes.
+  The next run reads that first and knows exactly what was in flight.
 - **Grounded, not guessed** — unknown facts are verified with citations, asked, or labeled
   suggestions; time-sensitive facts checked against today's web, not memory.
 - **Review with no session in its head** — `inspect` and `harden` declare `context: fork`
@@ -178,9 +181,12 @@ engineering/
 ├── decisions.md          # ADR-style decisions + why
 ├── index.md              # registry of every task + live status
 ├── changelog/<feature>/  # the app's memory: dated entry per change
-└── tasks/0001-<slug>/    # per task: intake · spec · plan · reviews · summary
+└── tasks/0001-<slug>/    # per task: intake · spec · plan · verify · reviews · release · summary
+    ├── log.md            # the journal: every start, resume, decision, and stop
     └── state.json        # the phase ledger (status / validated / approved)
 ```
+
+The tree is closed: the suite writes nothing outside it except the code your task calls for.
 
 Distilled decisions only — never your source pasted verbatim, never raw PII.
 

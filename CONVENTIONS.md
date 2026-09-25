@@ -10,8 +10,8 @@ Read the section you need; you do not need the whole file for every task.
 
 | § | Section | § | Section |
 |---|---------|---|---------|
-| 1 | The workspace `engineering/` + bootstrap | 11 | Git isolation & clean baseline |
-| 2 | The phase ledger `state.json` | 12 | Commit & push policy (never auto) |
+| 1 | The workspace `engineering/` (closed tree) + bootstrap | 11 | Git isolation & clean baseline |
+| 2 | The phase ledger `state.json` · **2.1** checkpoint journal `log.md` | 12 | Commit & push policy (never auto) |
 | 3 | Saved-ask schema + References | 13 | Close-out summary · **13.1** feature changelog |
 | 4 | Memory · profile vs standards axis | 14 | Grounding — do not guess |
 | 5 | Resume sweep · **5.1** the evidence gate | 15 | Session context scan & capture |
@@ -41,23 +41,35 @@ engineering/
 ├── standards.md        # coding standards — detected from the code, or established
 ├── decisions.md        # cross-task decisions and their WHY (ADR-style)
 ├── index.md            # ordered registry of every task and its live status
+├── onboarding.md       # shared codebase onboarding (written by learn, when run)
 ├── changelog/          # per-feature dated change history, size-rotated (§13.1)
 │   └── <feature>/<feature>-NNN.md
 └── tasks/
     ├── 0001-<slug>/    # numbered = strict order, no random steps
+    │   ├── log.md      # checkpoint journal: start, resume, decision, stop (§2.1)
     │   ├── intake.md   # every clarifying Q&A, in the standard schema (§3)
     │   ├── discovery.md# ranked feature proposals, when discover ran (pre-DEFINE)
     │   ├── spec.md     # the PRD  (produced by define)
     │   ├── design.md   # extracted UI/design spec, for frontend/mobile tasks (§6.2)
     │   ├── plan.md     # ordered, dependency-sorted tasks (produced by blueprint)
+    │   ├── verify.md   # what was run, the counts, pass/fail, root causes (produced by verify)
+    │   ├── evidence/   # raw command output backing verify.md and release.md, nothing else
     │   ├── review.md   # QA findings (produced by inspect)
     │   ├── security-review.md  # ranked security findings (produced by harden, when run)
     │   ├── design-review.md    # ranked UI findings (produced by design audits, when run)
     │   ├── assessment.md       # app health report (produced by assess, when run)
+    │   ├── release.md  # checklist evidence, rollback plan, GO/NO-GO (produced by release)
     │   ├── summary.md  # close-out handoff for the next session/AI (§13)
     │   └── state.json  # the phase ledger (§2)
     └── 0002-<slug>/
 ```
+
+**This tree is closed.** Every file the suite writes into the workspace has a name and a
+place above; a file not listed is a bug, whichever skill wrote it. Raw proof (test output,
+probe results, logs) goes in the task's `evidence/`, never beside the artifacts. Scratch
+work goes to the system temp directory and is deleted before the turn ends. Outside the
+workspace, a run writes only the code and tests its task calls for: no notes, probes, or
+helper files in the repo.
 
 **Shared workspaces collide on the number, and on `index.md`** — on a committed workspace
 (§20.1) two people can allocate the same `0007-…` and both append a row. Prevent it:
@@ -104,7 +116,8 @@ any skill that finds the workspace absent or incomplete bootstraps what it needs
 writing — and **asking where it goes (§20.1's location + exposure questions) is the first
 step of bootstrapping**, not a step the orchestrator does on your behalf. Then: create
 `engineering/` **at the recorded path**, allocate the next `tasks/NNNN-<slug>/` folder,
-initialize `state.json` (§2), and write the task's `index.md` row. Record the actual path
+open `log.md` with its START entry (§2.1), initialize `state.json` (§2), and write the
+task's `index.md` row. Record the actual path
 used, so downstream skills read the recorded path, never an assumed one. **An `engineering/`
 folder that appeared without the user choosing where it goes is a bug, whichever skill
 created it.**
@@ -163,6 +176,54 @@ This is what makes a run resumable and self-healing. Each task carries one:
   `status: "blocked"` with `"rejected": "<their reason, in their words>"`; it leaves that
   state only by **revising the artifact**, never by asking again. This is what `blocked`
   is for on a phase.
+- **A phase is `in_progress` the moment it starts, not when it finishes.** Write it before
+  the first action of the phase, so an interrupted run leaves a ledger that says where it
+  was, not one that still says `todo`.
+
+### 2.1 The checkpoint journal: `log.md` (mandatory, every skill, every run)
+
+Artifacts record *results*. The journal records *the run*, so nothing is lost when a
+session dies between two results: what was asked, what was decided and why, what the user
+said, and exactly where work stopped. It is append-only and lives in the task folder.
+
+**Write before you act.** An entry goes to disk *before* the step it describes, not after.
+A run that dies mid-step then leaves its intent on disk, and the next run knows what was in
+flight. Four moments are mandatory:
+
+| Moment | When | The entry records |
+|---|---|---|
+| **START** | a skill is invoked, before any other write | who invoked it, the request verbatim, entry point, the task folder chosen and why |
+| **RESUME** | the §5 sweep finishes, before new work | what was re-proved, what was repaired, what was downgraded, where work restarts |
+| **DECISION** | any choice that shapes the work, before acting on it | the choice, the options rejected, the reason, and whether the user or the run made it |
+| **STOP** | before any reply that ends the turn | the exact point reached, what is waiting on whom, and the next concrete step |
+
+A **DECISION** is anything a later reader would otherwise have to guess: size triage (§6.1),
+a skipped or added phase (§7), a route, a trade-off, a scope cut, a user's answer, an
+approach abandoned. A user's answer to a clarifying question also goes in `intake.md` (§3);
+the journal line points at it (`see intake Q3`) rather than copying it.
+
+**Last write before speaking.** No turn ends, whether at a gate, a question, a block, or
+completion, until `log.md`, `state.json`, and the task's `index.md` row all describe the
+point the run has reached. A reply the user reads while the disk says otherwise is the
+ledger lying (§20.2).
+
+**Entry shape** (one entry per moment, newest last):
+
+```
+### <ISO-8601 date-time> · <skill> · START | RESUME | DECISION | STOP
+<one to five lines: what, why, and what happens next>
+```
+
+**Rules that keep it trustworthy**
+- **Append only.** Never edit or delete an earlier entry; a correction is a new entry that
+  says what it corrects.
+- **Distilled, not transcribed.** Facts and reasons, never the user's source code, secrets,
+  or raw production data (§1, §19).
+- **A resume reads the journal first.** The last entry is where the previous run stopped;
+  the sweep (§5) then re-proves the disk against it rather than trusting it.
+- **Missing journal on an existing task** ⇒ create it with a RESUME entry saying it was
+  absent and what the ledger showed. Never reconstruct past entries from memory (§14).
+- `learn` keeps its own journal in `learning/progress.md`; everything else writes here.
 
 ---
 
@@ -315,7 +376,9 @@ drop.
 
 ## 5. The resume-and-validate sweep
 
-Before doing any new work, a run re-proves the past. Walk the phases in order:
+Before doing any new work, a run re-proves the past. **Read the task's `log.md` first**
+(§2.1): its last entry says where the previous run stopped and what was in flight. Treat it
+as a claim to check, not a fact. Then walk the phases in order:
 
 ```
 for phase in [define, blueprint, construct, verify, inspect, release]
@@ -355,6 +418,8 @@ for phase in [define, blueprint, construct, verify, inspect, release]
 Run the **workspace integrity check (§20.2) before the sweep**: any phase marked `done`
 whose artifact is missing or empty is downgraded to `in_progress` and repaired (from chat
 history or ledger content) before anything advances.
+
+When the sweep finishes, write the **RESUME** entry (§2.1) before any new work.
 
 The first phase that is missing, un-approved, mid-flight, or invalid is where work restarts.
 **No phase is trusted because it was marked done — it is re-proven, and a gated phase is not
@@ -1056,9 +1121,11 @@ done. Required artifacts:
 | Scope | Required on disk |
 |---|---|
 | `engineering/` root | `profile.md` · `standards.md` · `decisions.md` · `index.md` |
-| every `tasks/NNNN-<slug>/` at creation | `intake.md` · `state.json` · its `index.md` row |
+| every `tasks/NNNN-<slug>/` at creation | `log.md` · `intake.md` · `state.json` · its `index.md` row |
 | define done | `spec.md` |
 | blueprint done | `plan.md` |
+| verify done | `verify.md` · the `evidence/` it cites |
+| release decided | `release.md` |
 | design done (UI task) | `design.md` — `construct` builds against it |
 | inspect / harden / design audit | `review.md` / `security-review.md` / `design-review.md` |
 | assess / discover run | `assessment.md` / `discovery.md` |
@@ -1109,6 +1176,9 @@ artifact therefore has a **minimum content test**; failing it counts as missing:
 | `assessment.md` / `discovery.md` | a stated verdict or recommendation, not raw notes |
 | `intake.md` | at least one Q&A entry, or a recorded "no questions needed, and why" |
 | `summary.md` | what changed, what was proven, and what is left |
+| `log.md` | a START entry, and a STOP entry after the last reply the user saw |
+| `verify.md` | each command run, its counts, and pass/fail, pointing at `evidence/` |
+| `release.md` | the checklist with evidence per item, a rollback plan, and the decision |
 | `state.json` | parses, and every phase marked `done` also carries `validated` |
 
 A stub fails, is downgraded to `in_progress`, and is repaired like any missing artifact.

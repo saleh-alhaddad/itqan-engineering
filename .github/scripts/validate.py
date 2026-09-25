@@ -351,6 +351,45 @@ def check_enforced_promises_are_documented() -> None:
                 f"an enforced promise the user cannot read about")
 
 
+def check_every_skill_journals() -> None:
+    """Every workspace-writing skill must carry the §2.1 journal rule in its own text.
+
+    The journal is what keeps a run's decisions and stopping point from dying with the
+    session. Stated once in CONVENTIONS it is easy to skim past; stated in each skill it is
+    part of what the skill *is*. `learn` journals in its own learning/ folder instead.
+    """
+    for path in sorted(ROOT.glob("skills/*/SKILL.md")):
+        if path.parent.name == "learn":
+            continue
+        if "Journal every run (§2.1)" not in path.read_text(encoding="utf-8"):
+            err(f"skills/{path.parent.name}/SKILL.md: missing the 'Journal every run (§2.1)' "
+                f"rule — a run without it can lose its decisions and stopping point")
+
+
+def check_workspace_tree_is_closed() -> None:
+    """Every file §20.2 requires on disk must have a place in §1's workspace tree.
+
+    §1 declares the tree closed: a file not listed is a bug. That only holds if the tree
+    names everything the suite is required to write — otherwise a run obeying §20.2 has to
+    invent a location, which is exactly how stray files appeared (`verify.md`, `release.md`
+    and `evidence/` were written by real runs long before either section named them).
+    """
+    conventions = (ROOT / "CONVENTIONS.md").read_text(encoding="utf-8")
+    tree = re.search(r"^engineering/\n(.*?)^```", conventions, re.M | re.S)
+    table = re.search(
+        r"^\| Scope \| Required on disk \|$\n\|-+\|-+\|$\n((?:^\|.*$\n)+)",
+        conventions, re.M)
+    if not tree or not table:
+        err("CONVENTIONS.md: §1 workspace tree or §20.2 required-artifacts table not found")
+        return
+    # Entry names only: a comment that mentions a file ("backing verify.md") is not a place.
+    entries = "\n".join(line.split("#", 1)[0] for line in tree.group(1).splitlines())
+    listed = set(re.findall(r"([a-z][a-z-]*\.(?:md|json)|evidence/)", entries))
+    required = set(re.findall(r"`([a-z][a-z-]*\.(?:md|json)|evidence/)`", table.group(1)))
+    for missing in sorted(required - listed):
+        err(f"CONVENTIONS.md: §20.2 requires '{missing}' but §1's closed tree gives it no place")
+
+
 def main() -> int:
     parsed = check_json_files()
     check_name_consistency(parsed)
@@ -368,12 +407,14 @@ def main() -> int:
     check_audit_skills_are_forked()
     check_standards_fields_are_consumed()
     check_enforced_promises_are_documented()
+    check_every_skill_journals()
+    check_workspace_tree_is_closed()
     if ERRORS:
         print(f"FAIL — {len(ERRORS)} problem(s):")
         for e in ERRORS:
             print(f"  ✗ {e}")
         return 1
-    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented.")
+    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed.")
     return 0
 
 

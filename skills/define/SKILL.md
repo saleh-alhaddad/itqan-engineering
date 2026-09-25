@@ -18,6 +18,12 @@ integrations (§10), the session scan (§15), grounding — do not guess (§14),
 workspace integrity (§20). **If invoked mid-conversation, scan the chat first (§15)** — reuse the intent,
 constraints, and decisions already stated instead of re-asking them.
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 **If a tool is connected and the user references it** (§10): read the ticket/doc from an
 issue tracker or docs (Jira, Linear, Confluence, GitHub Issues) as the requirement source
 before asking questions — then ask only what it doesn't answer. Reading is free; treat the

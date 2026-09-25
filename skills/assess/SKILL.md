@@ -14,6 +14,12 @@ changelog (§1, §13.1 — the app's memory is your primary evidence), the role 
 gates (§7), multi-agent rules (§8), platform adapters (§9), grounding (§14), freshness
 (§17), closing output (§18), and data-driven decisions (§19), and the ledger (§2), workspace integrity (§20).
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 **Boundary with `discover`:** `assess` judges the features that exist; when its conclusion
 is "we need net-new X", hand that to `discover` (or straight to `define` if the user already
 chose). Don't run both from one ambiguous ask — existing-feature health leads here. If a run

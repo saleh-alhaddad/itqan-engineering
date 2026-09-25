@@ -17,6 +17,12 @@ intake schema (§3), memory (§4), the role dial (§6), gates (§7), multi-agent
 commit policy (§12 — Status is the resume marker), freshness (§17), and workspace
 integrity (§20).
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 ## Step 1 — Read the spec and the standards
 
 Load `spec.md` and `standards.md`. Every task you produce must trace back to a success

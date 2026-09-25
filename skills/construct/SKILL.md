@@ -14,7 +14,13 @@ slices, keep each one green and committable, and stop when the task is done — 
 
 Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), memory
 (§4), role dial (§6), skip rules (§7), multi-agent rules (§8), the commit/push policy (§12),
-the close-out summary (§13), and freshness (§17).
+the close-out summary (§13), freshness (§17), and workspace integrity (§20).
+
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
 
 ## Step 1 — Standards & patterns: scan, then detect or establish
 

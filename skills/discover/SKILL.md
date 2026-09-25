@@ -19,6 +19,12 @@ here — **grounding & no-hallucination (§14)** and **freshness (§17)**. Every
 with a source** or a **clearly-labeled suggestion**. Never invent a competitor, a statistic,
 a user count, or a source, and the ledger (§2), workspace integrity (§20).
 
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
+
 **Boundary with `assess`:** if the real question is *"are our existing features good
 enough?"*, that's `assess` (whole-app health) — run it, or read its latest `assessment.md`,
 and treat its "Recommended next moves" as this skill's input. `discover` leads when the

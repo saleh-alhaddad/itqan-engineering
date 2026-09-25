@@ -12,14 +12,20 @@ Two jobs: prove the change works with fresh evidence, and when it doesn't, find 
 changing anything. "Should pass", a previous run, or someone's self-report are never enough —
 you run it now and read what actually happened.
 
-Read [CONVENTIONS.md](../../CONVENTIONS.md) for the ledger (§2), memory (§4), the resume
+Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), memory (§4), the resume
 sweep (§5), multi-agent rules (§8), platform adapters (§9), closing output (§18 — the
-evidence is the result; don't pad it with suggestions), and data-driven decisions (§19). Load the **discipline pack** for the detected stack
+evidence is the result; don't pad it with suggestions), data-driven decisions (§19), and workspace integrity (§20). Load the **discipline pack** for the detected stack
 from `references/disciplines/` — its "In VERIFY" section tells you how to exercise *this*
 surface for real (real endpoints and error/auth paths for backend, offline and
 permission-denied paths for mobile, loading/error/empty states for frontend, a fresh eval-set
 run for AI/ML). Load any **concern pack** the change touches the same way — e.g.
 `database.md`'s VERIFY section (run migrations up *and* down, realistic data volume).
+
+**Journal every run (§2.1).** The first write of the run, once the task folder is resolved
+(§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
+`state.json`. Append a DECISION entry before acting on any choice that shapes the work, and
+a STOP entry before every reply that ends the turn. Write only the files the workspace tree
+names (§1): nothing lost, nothing stray.
 
 ## Part A — Prove it works (the evidence gate)
 
@@ -134,7 +140,8 @@ the old "done" — **re-run the proving command now**. Green-last-week is not gr
 ## Composition
 
 - **Consumes:** the built code + tests, the spec's success criteria, project memory.
-- **Produces:** an evidence-backed pass/fail; regression tests for any bug found; `verify`
+- **Produces:** `verify.md` (each command run, its counts, pass/fail, root causes) with the raw
+  output it cites in the task's `evidence/`; regression tests for any bug found; `verify`
   marked in the ledger; root-cause notes worth keeping in `decisions.md`.
 - **Hands off to:** `inspect`, which judges quality once the change is proven.
 - **Receives from:** `construct` (built slice), `engineer` (VERIFY phase), a bug report

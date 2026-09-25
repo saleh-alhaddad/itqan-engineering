@@ -3,6 +3,18 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.5] — 2026-09-25
+
+### Added
+- **Checkpoint journal (`log.md`, CONVENTIONS §2.1), mandatory for every skill.** Each run appends a START entry as its first write, a RESUME entry after the sweep, a DECISION entry before acting on any choice that shapes the work, and a STOP entry before every reply that ends the turn. Entries are written *before* the step they describe, so a session that dies mid-step leaves its intent on disk. Append-only; a resume reads it first and re-proves the disk against it.
+- **Last write before speaking:** no turn ends until `log.md`, `state.json`, and the task's `index.md` row describe the point the run has reached.
+- A phase is marked `in_progress` before its first action, not only `done` at the end.
+- Validator guards: every workspace-writing skill must carry the journal rule, and every artifact §20.2 requires must have a place in §1's tree. Both were proven to fail when their rule is broken.
+
+### Changed
+- **The workspace tree is closed.** A file it does not name is a bug. Raw proof goes only in a task's `evidence/`; scratch work goes to the system temp directory and is deleted; nothing else is written into the repo.
+- `verify` now produces a named `verify.md` and `release` a named `release.md`. Both skills previously described their output without naming a file, so real runs invented names and locations.
+
 ## [0.0.4] — 2026-09-21
 
 ### Changed
@@ -33,6 +45,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.5]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.1...v0.0.2
