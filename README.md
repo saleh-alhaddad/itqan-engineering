@@ -154,6 +154,10 @@ What you type depends on the install:
   (`Mirrors:`), and when your codebase has two ways of doing the same thing it never picks
   silently: it shows you both, where each is used, which is newer, and recommends one. It
   never copies a pattern that is a bug, such as string-built SQL.
+- **It proposes better ways, and never slips them in:** a newer API, a faster query, logic in
+  the wrong place. Only with a named gain and evidence, at most three per task, each with
+  options (keep, new code only, apply now, or a follow-up) and its recommendation. You
+  decide, and a declined idea is not raised again without new evidence.
 - **Grounded, not guessed** — unknown facts are verified with citations, asked, or labeled
   suggestions; time-sensitive facts checked against today's web, not memory.
 - **Review with no session in its head** — `inspect` and `harden` declare `context: fork`

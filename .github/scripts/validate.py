@@ -415,6 +415,7 @@ def check_judgment_floor_is_intact() -> None:
         "skipping a phase or routing a change as small": r"skipping or adding a phase or gate",
         "run-mode consent (agents, loop, commits)": r"run-mode consent",
         "judgment's own controls": r"judgment's own controls",
+        "adopting or declining a better way": r"adopting a better way for the codebase",
     }
     for name, pattern in required.items():
         if not re.search(pattern, floor.group(1)):
@@ -429,6 +430,16 @@ def check_code_shaping_skills_follow_the_code() -> None:
     nothing asked for the file that was followed, and nothing covered a codebase with two
     ways. A rule an agent cannot be checked against is a rule it can claim to have kept.
     """
+    for skill in ["blueprint", "construct", "inspect"]:
+        if "§4.3" not in (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8"):
+            err(f"skills/{skill}/SKILL.md: must route better-way ideas through §4.3 proposals")
+    for phrase, meaning in [
+        (r"What earns a proposal\.\*\* It must clear all four", "§4.3's four-part bar"),
+        (r"At most three per task", "§4.3's limit of three proposals"),
+        (r"never re-asked", "§4.3's record-the-answer rule"),
+    ]:
+        if not re.search(phrase, (ROOT / "CONVENTIONS.md").read_text(encoding="utf-8")):
+            err(f"CONVENTIONS.md: §4.3 no longer states {meaning}")
     for skill in ["define", "blueprint", "construct", "design", "inspect"]:
         body = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
         if "§4.2" not in body or "Mirrors" not in body and skill != "design":

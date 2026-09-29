@@ -43,6 +43,11 @@ Before writing anything, know the rules of *this* codebase and how it already so
   that kind disagree, stop and ask, with the evidence and a recommendation §4.2 lays out:
   never pick one silently, never blend them, never add a third. A plan task whose `Shape`
   already names the way settles it.
+- **Seen a better way? Propose it, never slip it in (§4.3).** A newer API, a faster query, a
+  responsibility in the wrong place: if it clears §4.3's bar (a named gain, evidence,
+  bounded, near the work), put it to the user with options and your pick, in the same round
+  as any other question, and build what they choose. If it does not clear the bar, it is not
+  raised.
 - **Existing code?** Detect the conventions and follow them — do not impose your own: the
   linter/formatter config, the test framework and how tests are named and laid out, folder
   structure, error-handling style. Record what you found in `standards.md` so later tasks

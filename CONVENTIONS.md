@@ -13,7 +13,7 @@ Read the section you need; you do not need the whole file for every task.
 | 1 | The workspace `engineering/` (closed tree) + bootstrap | 11 | Git isolation & clean baseline |
 | 2 | The phase ledger `state.json` · **2.1** checkpoint journal `log.md` | 12 | Commit & push policy (never auto) |
 | 3 | Saved-ask schema + References | 13 | Close-out summary · **13.1** feature changelog |
-| 4 | Memory · **4.1** judgment · **4.2** follow the code | 14 | Grounding — do not guess |
+| 4 | Memory · **4.1** judgment · **4.2** follow the code · **4.3** better ways | 14 | Grounding — do not guess |
 | 5 | Resume sweep · **5.1** the evidence gate | 15 | Session context scan & capture |
 | 6 | Role dial · **6.1** size triage · **6.2** ambition/UI | 16 | Large changes on under-specced systems |
 | 7 | Quality gates & legal skips | 17 | Freshness — today's date, web-checked |
@@ -485,6 +485,7 @@ rule.
 - anything destructive or irreversible: deleted data, a destructive migration, a force push
 - changing scope: adding or dropping a requirement
 - judgment's own controls: a tier's level, and confirming, narrowing, or reviving a rule
+- adopting a better way for the codebase or declining one (§4.3)
 
 The floor covers **whether and when** these happen, never their form: whether to push is the
 user's call every time, while the shape of a commit message can be a `style` rule. These are
@@ -586,7 +587,7 @@ other projects.
 
 **Order of authority** (a higher one settles the question; a lower one never overrides it):
 1. **A rule stated on purpose:** a linter or formatter setting, a convention documented in
-   the repo, an ADR in `decisions.md`, a deprecation note, or a `user-stated` entry in
+   the repo, an ADR in `decisions.md`, a deprecation note in the repo, or a `user-stated` entry in
    `standards.md` (the user's ruling on this repo). New code meets it even where neighbouring
    code does not, and the neighbour's violation is noted, not copied.
 2. **The code nearest the change:** the file being edited, then its module, then its siblings
@@ -609,7 +610,9 @@ Mirrors: <path> (<what was taken from it>) · <path> (<what>) · not taken: <wha
 ```
 in the plan task's `Shape` (`blueprint`), the DECISION journal entry (§2.1), and the change
 summary (§12). A claim to have followed the codebase without a named file is not evidence
-(§14). **A kind the repo has never had** is said to be new, and its shape is proposed, not
+(§14). **If the code already does what the task asks**, say so before building anything:
+reuse it, wrap it, or ask what should differ. A second copy of existing behaviour is not
+following the code. **A kind the repo has never had** is said to be new, and its shape is proposed, not
 assumed: at the plan gate when it adds a file, a public interface, or a schema change. "Kind" means what a reviewer would compare
 it against: a write query where the repo only has reads is a new kind.
 
@@ -651,9 +654,73 @@ them one after another turns one decision into a conversation.
 **A pattern that is itself a defect is never copied.** Following the neighbours is not
 permission to repeat a security hole or a bug (string-built SQL, a swallowed error, a
 secret in code). Calling a defective shared helper, extending it, or copying its shape all
-count as copying it. Stop, say what the neighbour does and why it is unsafe, and ask how to
-proceed. For a pattern that is merely dated or clumsy, follow it for this task and raise the
-improvement separately; rewriting what works was not part of the task (§7).
+count as copying it. Stop, show it as you would a proposal's evidence (a failing input, a
+wrong result reproduced, the unsafe line), name every other copy of the same defect whose
+result must agree with this one, and ask, in the same round as everything else: **fix it here** (the task grows by the fix), or **isolate it**
+(the new code avoids the defect, the old code stays, and a follow-up is recorded). Copying it
+is never one of the options. Check for defects **before** reuse: "reuse it or wrap it" never
+applies to code that is itself defective. For a pattern that is merely dated or clumsy, follow it for this task and raise the
+improvement as a proposal (§4.3); rewriting what works was not part of the task (§7).
+
+### 4.3 A better way: propose it, never impose it
+
+Following the code (§4.2) does not mean pretending it cannot be improved. When the run sees
+that something it is about to follow, or code the task touches, could be done better, it
+says so as a **proposal with options**, and the user decides. It never slips the improvement
+into the change on its own, and it never raises noise.
+
+**What earns a proposal.** It must clear all four, or it is not raised:
+1. **A concrete gain**, named as one of: correctness (it is wrong today, or wrong on an edge),
+   speed (fewer queries, less work, measurable latency), robustness (failure handling,
+   resource use), structure (a responsibility in the wrong place, duplicated logic that must
+   change together), or a newer capability (a built-in or API that replaces hand-written
+   code). "Cleaner" or "more modern" alone is taste, not a gain.
+2. **Evidence**, not opinion: a measurement or a count (queries per request, a benchmark
+   run here), a failing case, or for a newer API a documentation link checked against today's
+   date (§17), with the version the project already uses shown to support it.
+3. **Bounded**: it fits inside this task or one small follow-up. A migration of the codebase,
+   a new framework, or a rewrite is not a proposal here; it goes through §16 or `discover`.
+4. **Near the work**: it concerns code this task writes or touches, or what that code is about
+   to copy. Improvements found elsewhere go to the close-out's `Follow-ups:` (§13), unasked.
+
+**Defect or proposal?** If following the current code would make *what this task delivers*
+return wrong results, lose data, or be exploitable, it is a defect: §4.2's stop, not a
+proposal. If the risk is latent (an input the code never receives today, an API that still
+works but is deprecated upstream), it is a proposal with a `correctness` or `robustness`
+gain. An upstream deprecation is evidence for a proposal, not a rule of this repo (§4.2).
+
+**How it is shown** (§3's shape, in the same round as any §4.2 questions):
+```
+Proposal: <what changes, and where>
+Gain:     <correctness | speed | robustness | structure | newer capability>: <evidence>
+Cost:     <files touched, callers affected, risk, and how it is verified. With no tests to
+           verify it, the first test is part of the cost, and is said to be a new kind>
+Options:
+  A) keep the current way            <what that means>
+  B) new code only, old code as is   <what that means; recorded as the repo's direction>
+  C) apply it to what this task touches now   <how much the task grows>
+  D) record it as a follow-up task   <where it is recorded>
+My pick: <a letter, or a combination such as "C here, D for the rest">, because <reasons>
+```
+Omit an option that does not apply, and say why. **Option B needs a file of its own**: when
+the new code would land in a file written the old way, B is not offered, since two ways
+never meet in one file (§4.2). Nor is B offered where the code already has two ways: a third
+is never added; choose between the existing ones, or migrate. Rank the recommendation by what the evidence supports, not by preference, and say
+plainly when the honest pick is A.
+
+**At most three per task**, ranked by gain. More than that is a review, not a proposal:
+list the rest under `Follow-ups:` (§13) and say how many were held back.
+
+**The answer is recorded so it is never re-asked.** The choice and the user's reason (if they
+give one) go in `intake.md` (§3) and the journal (§2.1). B or C sets a direction: record it in
+`standards.md` under `Conventions:` as `user-stated`, and in `decisions.md`. A declines it:
+record that under `Conventions:` as `user-stated` too (`keeps <current way>; declined <proposal>, <date>,
+<reason>`), and do not raise the same
+proposal again unless new evidence appears, such as a deprecation or a measured regression.
+D becomes a follow-up in `summary.md` and, when the user asks, a row in `index.md`.
+
+**Judgment never decides these** (§4.1): adopting a new way changes the codebase's own
+rules, so it is always the user's call.
 
 ---
 
@@ -1301,7 +1368,7 @@ suggestion only when it genuinely earns its place:
 
 - a **bug or defect** you noticed, or a **missing/skipped step**;
 - a **critical risk** (security, data loss, breaking change) the user should know;
-- a change that **clearly adds real value**, not a vague nicety.
+- a change that **clearly adds real value**, not a vague nicety: one that clears §4.3's bar.
 
 If none of those apply, end with the result and stop. A good engineer hands off the work,
 not a list of maybes.

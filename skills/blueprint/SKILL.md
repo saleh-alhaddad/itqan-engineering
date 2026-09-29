@@ -61,7 +61,9 @@ Shape:       <which files this touches or creates · new abstraction vs reuse-an
               the user can see>
 Mirrors:     <the existing files this task follows, and what it takes from each (§4.2). If
               the codebase has two ways for this kind of code, the choice goes here as a
-              question with both ways and a recommendation, so the gate settles it>
+              question with both ways and a recommendation, so the gate settles it.
+              A better way worth proposing (§4.3) goes here too, with its options, so the
+              user chooses it at the plan gate instead of discovering it in the diff>
 Size:        <XS | S | M | L>  (break down anything L)
 Status:      todo   (construct updates this to in-progress → done as the slice goes green —
                      it is the resume marker now that slices aren't committed individually, §12)

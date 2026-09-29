@@ -33,6 +33,11 @@ full text in [CONVENTIONS.md](https://github.com/saleh-alhaddad/itqan-engineerin
   nearest the change, then recorded standards, then your judgment, then general practice),
   a `Mirrors:` line naming the files followed, and one question with evidence and a
   recommendation whenever the codebase does the same thing two ways.
+- **§4.3**: **better ways**. An improvement is raised only with a named gain (correctness,
+  speed, robustness, structure, a newer capability), evidence, a bounded size, and a place
+  near the work. It comes as options with a recommendation, at most three per task, and
+  your answer is recorded so it is never re-asked. A real bug is not a proposal: it stops
+  the work, with fix-here or isolate as the choices.
 
 ## Resuming, role & gates (§5–§7)
 

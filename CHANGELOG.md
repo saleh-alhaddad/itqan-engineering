@@ -3,6 +3,19 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.9] — 2026-09-29
+
+### Added
+- **Better ways are proposed, never imposed (CONVENTIONS §4.3).** When the run sees that code it follows or touches could be done better, it raises a proposal only if it clears four bars: a named gain (correctness, speed, robustness, structure, or a newer capability; "cleaner" alone is taste), evidence (a measurement, a failing case, or a documentation link checked against today's date), a bounded size (migrations and rewrites go through §16 or `discover`), and a place near the work.
+- Each proposal comes with options (keep the current way; new code only; apply to what the task touches; record a follow-up) and the run's pick with its reasons. New-code-only is not offered where it would put two ways in one file, or add a third. At most three per task, ranked by gain; the rest go to the close-out's follow-ups.
+- The answer is recorded so it is never re-asked: a chosen direction in `standards.md` and `decisions.md`, a decline in `standards.md` with its date and reason, raised again only on new evidence. Judgment never decides these.
+- **Defect or proposal** is decided by one test: if following the current code would make what this task delivers return wrong results, lose data, or be exploitable, it is a defect and stops the work, with evidence and the choice of fixing it here or isolating it. Copying it is never an option, and defects are checked before any reuse. A latent risk, such as an API deprecated upstream, is a proposal.
+- If the code already does what a task asks, the run says so before building: reuse, wrap, or say what differs.
+- `blueprint` carries proposals in the plan's `Shape` so they are decided at the gate; `construct` raises them instead of applying them; `inspect` writes better-way suggestions as proposals. Validator guards for the bar, the limit, the record rule, and the judgment floor, each proven to fail when removed.
+
+### Verified
+- Two blind runs on a real test repository with three genuine opportunities (a query per loop iteration, a deprecated URL API, duplicated pricing logic) and two temptations (a style preference, a migration to an ORM). Both runs raised exactly the three and excluded both temptations with the right rule. Unprompted, the first also found a real defect that was not planted (money computed in floating point, and a numeric column that the driver returns as a string would concatenate instead of add), and noticed the task duplicated an existing function. Its report led to the defect-or-proposal test above; the second run applied it correctly.
+
 ## [0.0.8] — 2026-09-29
 
 ### Changed
@@ -88,6 +101,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.9]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.5...v0.0.6

@@ -132,6 +132,10 @@ the complaint.
 ### FYI        (noted, non-blocking)
 ```
 
+A suggestion to do something a better way (a newer API, fewer queries, a responsibility
+moved) is written as a §4.3 proposal, with its gain, evidence, options and your pick, and
+only if it clears §4.3's bar. Taste is not a finding.
+
 If nothing critical or high is found, say so plainly — a clean review is a valid result, not
 a failure to find enough.
 
