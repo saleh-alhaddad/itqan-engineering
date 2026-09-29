@@ -60,7 +60,7 @@ and picks up at the first unproven step.
 | Path | Command | You get |
 |---|---|---|
 | **npx** *(above)* | `npx skills add saleh-alhaddad/itqan-engineering` | one skill: `itqan`, routing to all 12 (needs Node ≥ 22.20) |
-| **Guided installer** | `curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh -o itqan-install.sh` → read it → `bash itqan-install.sh` | same — checks Node, offers upgrade, git fallback; add `--auto` for CI |
+| **Guided installer** | `git clone https://github.com/saleh-alhaddad/itqan-engineering` → `./itqan-engineering/install.sh` | same — checks Node, offers upgrade, git fallback; add `--auto` for CI |
 | **Claude Code plugin** | `/plugin marketplace add saleh-alhaddad/itqan-engineering` → `/plugin install itqan` | 12 skills, each invocable: `itqan:engineer`, `itqan:inspect`, … |
 | **Cursor** | already covered by npx/installer (`~/.agents/skills/`) | per-project copy & details: [Book ch. 2](docs/02-installation.md#path-d--cursor) |
 | **A specific agent** | `npx skills add saleh-alhaddad/itqan-engineering -a <agent>` | the suite on that agent (`npx skills add --help` lists the 70+ valid names) |

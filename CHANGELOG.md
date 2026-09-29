@@ -3,6 +3,11 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.8] — 2026-09-29
+
+### Changed
+- The guided installer is now run from a clone (`git clone …` then `./itqan-engineering/install.sh`), never fetched from a URL. README, the installation chapter, the FAQ, and the script's own usage header all say so, and no remote-script URL remains in the repository. 0.0.4 had already stopped piping the script into a shell, but downloading it and then running it is still fetching remote code to execute: the one item behind the HIGH rating from Gen Agent Trust Hub (re-audited 2026-09-25). The installer itself is unchanged, and still installs through `npx skills add` or `git clone`.
+
 ## [0.0.7] — 2026-09-29
 
 ### Added
@@ -83,6 +88,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.8]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.4...v0.0.5

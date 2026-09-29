@@ -5,9 +5,8 @@
 # needs no Node at all.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh -o itqan-install.sh
-#   (read it, then) bash itqan-install.sh
-#   ./install.sh            # from a clone
+#   git clone https://github.com/saleh-alhaddad/itqan-engineering
+#   ./itqan-engineering/install.sh          # add --auto for CI
 set -euo pipefail
 
 REPO="saleh-alhaddad/itqan-engineering"

@@ -8,7 +8,7 @@
 flowchart TD
     S{Which agent?} -->|"Claude Code"| CC["/plugin marketplace — 12 individually-invocable skills"]
     S -->|"Cursor / Codex / OpenCode / 70+ agents"| NPX["npx skills add — whole suite as one routed skill"]
-    S -->|"Node too old / none"| CURL["curl installer — checks Node, offers upgrade, git fallback"]
+    S -->|"Node too old / none"| CURL["guided installer, from a clone: checks Node, offers upgrade, git fallback"]
     S -->|"anything else"| GIT["git clone + point your loader at it"]
 ```
 
@@ -29,19 +29,19 @@ Codex, OpenCode, and more.
 ## Path B — Guided installer (handles Node for you)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/saleh-alhaddad/itqan-engineering/main/install.sh -o itqan-install.sh
-# read it first — then:
-bash itqan-install.sh
+git clone https://github.com/saleh-alhaddad/itqan-engineering
+./itqan-engineering/install.sh
 ```
 
-Downloading before running is deliberate: piping a script straight into a shell runs code you
-never saw. The file is short, and nothing in this suite asks you to trust it unread.
+The installer runs from a clone on purpose: you have the whole script on disk to read before
+running it, and nothing is fetched from a URL and executed. Fetching a script and running
+it, piped or not, runs code you did not choose to keep.
 
 Checks your Node → offers the upgrade (via nvm when present) → installs; or falls back to a
 plain-git install that needs no Node. Fully hands-off for teams/CI:
 
 ```bash
-bash itqan-install.sh --auto
+./itqan-engineering/install.sh --auto
 ```
 
 `--auto` = zero prompts, best path chosen automatically, any npx failure rescued by the git
@@ -160,7 +160,7 @@ What you type depends on which path you installed:
 
 | Path | What registers | You invoke |
 |---|---|---|
-| **A / B / D** (npx · curl · Cursor) | **one** skill: `itqan` | `itqan` — then say what you want; the root `SKILL.md` routes |
+| **A / B / D** (npx · installer · Cursor) | **one** skill: `itqan` | `itqan` — then say what you want; the root `SKILL.md` routes |
 | **C** (Claude Code plugin) | **12** skills, namespaced | `itqan:engineer` — or `:inspect`, `:verify`, `:harden`, … |
 | **E** (any other runtime) | depends on the loader | ask for it by name: *"use the itqan skill to …"* |
 
