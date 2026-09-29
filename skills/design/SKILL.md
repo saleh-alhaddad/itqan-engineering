@@ -17,7 +17,7 @@ Read [ui-craft.md](../../references/disciplines/ui-craft.md) — the universal, 
 UI reference — and the matching discipline pack ([frontend](../../references/disciplines/frontend.md)
 or [mobile](../../references/disciplines/mobile.md)). Read [CONVENTIONS.md](../../CONVENTIONS.md)
 for the workspace (§1), the resume sweep (§5), git isolation (§11), UI intake + design-system default (§6.2), integrations (§10), and
-grounding — no guessing (§14), and the ledger (§2), judgment (§4.1), workspace integrity (§20).
+grounding — no guessing (§14), and the ledger (§2), judgment (§4.1), freshness (§17), workspace integrity (§20).
 
 **Journal every run (§2.1).** The first write of the run, once the task folder is resolved
 (§20.1), is a START entry in the task's `log.md`; then set this phase `in_progress` in
@@ -41,31 +41,41 @@ Detect which the user wants from their ask:
    export, a reference, or a description. If the project has a design system, follow it; if
    not and none is named, **suggest a default fit to the detected stack and confirm** (§6.2)
    — e.g. a component library like shadcn/ui + Tailwind for React web, Material 3 or native
-   patterns for mobile. Never silently invent a look on a task expecting a specific one.
+   patterns for mobile — after checking it supports the installed framework version, against
+   current docs, cited (§17). Never silently invent a look on a task expecting a specific one.
    New components mirror the repo's existing ones and name them (§4.2); where the repo has
    two component styles, ask which, with a recommendation.
 2. **Shape it (ui-craft DESIGN & BUILD).** Content before container; grayscale-first to prove
-   hierarchy; constrain the scales (spacing/type/color/z-index); commit to one visual
-   identity and one depth strategy; escape the AI-aesthetic defaults with a signature element.
+   hierarchy; constrain the scales (spacing/type/color/z-index). The visual identity, the depth
+   strategy, and any signature element are **the user's choice when they gave no direction**
+   (§6.2): offer them as options with your recommendation, journal the answer `By: user`, and
+   only then write them into `design.md`. Never pick a look on the user's behalf.
 3. **Distill into `design.md`** (§6.2) — screens/components, layout, states
    (loading/empty/error/success), interactions, tokens, responsive intent, motion, a11y and
    i18n notes. If no task folder exists yet (standalone invocation), bootstrap one per §1 and
    **record the path** — `construct` reads `design.md` from the recorded path, never an
    assumed one. This is the source of truth `construct` builds against.
-4. **Hand off.** For implementation, hand `design.md` to `construct` (or `engineer` for a full
+4. **Hand off**, once the user has confirmed `design.md`. For implementation, hand it to `construct` (or `engineer` for a full
    build). For a risky/unclear direction, suggest a quick **prototype/spike** first (§6.2).
 
 ## Review / audit
 
 Apply ui-craft REVIEW: a finding is valid only with a violated contract + demonstrated impact
-+ a deterministic fix (no "I'd prefer" nitpicks). Run the fixed axis checklist
++ a deterministic fix (no "I'd prefer" nitpicks). **The contract is the approved `design.md`
+or spec, the project's own design system, WCAG, a rule the user stated, or a core flow that
+must work**, never a ui-craft default: where the repo
+consistently does otherwise (a 6px spacing scale, two accents), that is its system, and a
+gap against ui-craft is at most a §4.3 proposal. Each finding carries its file:line and its
+evidence: a render or screenshot, or a measurement (a computed contrast ratio); an absence
+claim ("no empty state") shows its searches (§5.2). Run the fixed axis checklist
 (hierarchy, contrast, spacing/density, consistency, states/feedback, responsive, coherence,
 motion, a11y) and the craft self-audit (squint test, one focal point, single depth strategy,
-single accent). Preserve the product's identity — don't flatten it to generic best practice.
+single accent) as prompts for where to look, not as findings in themselves. Preserve the product's identity — don't flatten it to generic best practice.
 Write the findings to **`design-review.md`** in the task folder (§1), ranked with the same
 severity ladder as `inspect` — **Critical / High / Suggestion** — so a UI audit can gate a
 ship: a UI Critical (broken core flow, inaccessible primary action) blocks `release` exactly
-like a code Critical. Route fixes through `construct` → `verify`.
+like a code Critical. The user chooses, per finding, fix now, accept, or follow-up; chosen
+fixes go through `construct` → `verify`.
 
 **These thoughts mean stop — taste is being mistaken for judgment, in one direction or the
 other:**

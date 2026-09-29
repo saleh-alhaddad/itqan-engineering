@@ -4,9 +4,15 @@ Load when the repo shows ML frameworks (torch/tensorflow/transformers/jax/sklear
 notebooks, `train.py`/`eval.py`, a `model/` or `data/` tree, or dataset/eval configs. Covers
 both classic ML and LLM-application work. Framework and model are detected, never assumed.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec)
 - Define **success as a metric**, not a vibe: the eval set, the metric(s), and the target/
-  baseline to beat. "Better" is untestable; "+X on this held-out set" is.
+  baseline to beat. "Better" is untestable; "+X on this held-out set" is. X comes from the
+  user or from a measured baseline, never a number the run picked (§14, §19).
 - Name the **data**: source, licensing, PII, train/validation/test split, and leakage risks.
 - For **LLM apps**: the task contract (input → expected output shape), the failure modes that
   matter (hallucination, refusal, injection), and guardrails.

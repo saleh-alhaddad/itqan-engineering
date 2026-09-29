@@ -3,6 +3,27 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.11] — 2026-09-29
+
+### Changed
+A full audit of every skill, `CONVENTIONS.md`, and every discipline pack against one question: where can the agent still guess, report something it did not verify in this run, or decide something that belongs to the user? The main changes:
+- **`release` recommends the GO; the user decides it, before anything moves.** Rollout used to come before the GO, so a run could deploy and grant itself the GO afterwards. Each merge, deploy, stage advance, and rollback now waits for its own approval, unless the user approved it as part of the GO. A checklist item the run cannot see is `not verified`, never ticked from a template.
+- **`verify` proves the root cause and hands the fix to `construct`**, so the fix is built under the user's locks, `Mirrors`, and the fix-here-or-isolate choice, instead of `verify` editing code on its own.
+- **A run's own rulings go in `log.md` as `By: run`, never in `intake.md`**, which holds the user's answers and feeds judgment. The inferred role moves out of `intake.md` for the same reason.
+- **Planning reads the code**: `blueprint` opens every file a `Shape` or `Mirrors` line names, checks the lockfile, and puts a missing dependency to the user as options. `define` searches for existing behaviour and takes every number from the user or a measured baseline.
+- **Evidence for every verdict**: `harden` ranks on a source-to-sink trace plus verified reachability, records its coverage, and resolves a finding only when a reproduction no longer works; `design` audits against the project's own system, not a pack's defaults; `assess` builds its feature map from the code and never grades on an "expert judgment" label; `discover` counts its market sample and, without web access, writes "not performed" instead of recalling competitors; `learn` cites only resources it opened.
+- **Every discipline pack states it is the lowest authority**, since skills load packs directly; several packs lost Postgres-only or always-on rules that overrode the repo.
+- **Skipping a gate**: the blast-radius search decides. Nothing depends on the change: the run announces the small route and proceeds. Something does: it asks. A contract change: full lifecycle.
+- **Design gaps** the repo already settles take the repo's value, cited; only unsettled gaps are asked, in one round.
+- **Records the run rebuilt lose their authority**: a rebuilt spec, plan, intake, waiver, or GO comes back unapproved; evidence is re-run, never rebuilt.
+- A task-level `status` in `state.json` (with `done` for small-route tasks), written by the skill that ends the task, so a finished task can never be revived by a rebuilt `index.md` row. ADRs record who accepted them. The changelog entry is written once a change is proven.
+- Validator guards for the pack authority line, release's order, `By: run` rulings, harden's ranking, and §7's evidence rule, each proven to fail when broken.
+
+### Verified
+- Round 1: five independent reviewers found about 80 places across the suite; every quote was checked against the text before a fix.
+- Round 2: three reviewers checked the fixes and found 21 more, including three where a fix made things worse (a security gate that could no longer block a real Critical, a waived finding that would block every resume, a flaky test outside the task that would stall every task) and two over-corrections (asking about every design gap, asking before every typo).
+- Round 3: a behavioural test of ten situations drawn from those fixes, answered 10 of 10 as intended; its remaining ambiguities were closed, including a final status for small-route tasks.
+
 ## [0.0.10] — 2026-09-29
 
 ### Added
@@ -116,6 +137,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.11]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.10...v0.0.11
 [0.0.10]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.7...v0.0.8

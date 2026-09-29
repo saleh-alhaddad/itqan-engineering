@@ -12,7 +12,7 @@ Two jobs: prove the change works with fresh evidence, and when it doesn't, find 
 changing anything. "Should pass", a previous run, or someone's self-report are never enough —
 you run it now and read what actually happened.
 
-Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), memory (§4), the resume
+Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), skip rules (§7), the feature changelog (§13), memory (§4), the resume
 sweep (§5), multi-agent rules (§8), platform adapters (§9), closing output (§18 — the
 evidence is the result; don't pad it with suggestions), data-driven decisions (§19), and workspace integrity (§20). Load the **discipline pack** for the detected stack
 from `references/disciplines/` — its "In VERIFY" section tells you how to exercise *this*
@@ -53,12 +53,24 @@ from `state.json`, the journal, or memory. A `missing` or `done differently` row
 screenshot evidence, and a11y-tree reads are how "exercise it for real" is proven in a
 browser. **Never re-run an unchanged test command "to be sure"** — the first full read is the
 evidence; re-rolling adds nothing but doubt. **Deterministic scanners must not regress:** if
-the repo has linters/analyzers, the change must not report more findings on the changed
-scope than before it.
+the repo has linters/analyzers, run them on the base commit and on the change, over the
+changed scope, and save both counts in `evidence/`; the change must not report more
+findings. "No regression" without the two counts is a claim, not a result.
+
+**On the small route there is no `inspect` or `release`** (§7): when `verify` is green there,
+it closes the task. It sets the task's `status` to `done` in `state.json` and the `index.md`
+row from it (§2), and appends the feature's dated changelog entry (§13.1). On the full route,
+it hands to `inspect` instead.
+
+**A quarantined test is logged** in the task's `summary.md` under `Follow-ups:` as a defect to
+investigate; marking it skipped in its own module is part of what the user approved.
 
 **A pass-on-rerun is not green.** A test that fails then passes on retry is an intermittent
-failure: name it, quarantine it explicitly, and log it as a defect to investigate — never
-re-roll a flaky suite until it happens to pass.
+failure: name it, **propose** quarantining it to the user, and log it as a defect to
+investigate — never re-roll a flaky suite until it happens to pass. A quarantine takes
+effect only on the user's yes. If the quarantined test is **outside the changed scope**, it
+does not block this task: `verify.md` names the exception, and everything else must pass. If
+it is **inside** the changed scope, `verify` is not green until it is fixed or explained.
 
 **Exercise it, not just the unit tests.** Tests passing is necessary, not sufficient — run
 the real thing the way a user would and confirm the observable success criteria from the
@@ -124,12 +136,17 @@ started, who it hits, and what correlates, which is what makes a minimal repro f
                the data is still correct and where it first goes wrong.
 3. Trace back  Follow the data flow BACKWARD from the symptom to the source — the first
                point where reality diverges from intent. That is the root cause, not the
-               line that finally threw.
-4. Pin it      Commit the minimal repro as a FAILING automated test BEFORE touching a fix —
+               line that finally threw. State it with its file:line and the observed
+               divergence (the value you saw vs the value intended), or it is a hypothesis.
+4. Pin it      Add the minimal repro as a FAILING automated test BEFORE touching a fix —
                construct's RED-first iron law applies to bugs too. Watch it fail for the
                right reason.
-5. Fix once    Form ONE hypothesis, make the SMALLEST change that addresses the root cause,
-               and watch the repro test go GREEN.
+5. Fix once    Hand the proven root cause and the pinned repro to `construct` (its
+               Re-entry), which makes the SMALLEST change under its own rules: the locks
+               that apply (§5.2), `Mirrors` (§4.2), and, if the cause is a defect with other
+               copies, the user's fix-here-or-isolate choice (§4.2). A fix that would
+               depart from an approved plan is an amendment, never a quiet rewrite back to
+               the plan. Then return here and watch the repro test go GREEN.
 6. Guard       The repro test stays in the suite forever, so this bug cannot return silently.
 ```
 

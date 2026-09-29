@@ -6,6 +6,11 @@ is **stack-agnostic** — adapt it to the detected framework and design system; 
 a library. **Follow the project's own design system first**; these are the defaults when it
 has none. Distilled as ideas from established UI craft practice, not copied.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## DESIGN & INTAKE — shaping the UI
 
 1. **Intent first.** Identify the real human, the verb they must accomplish, and how it
@@ -13,14 +18,16 @@ has none. Distilled as ideas from established UI craft practice, not copied.
 2. **Escape the "AI aesthetic."** Name the defaults and refuse them on free axes: default
    purple/violet gradients, Inter/Roboto everywhere, over-rounded everything, stock hero +
    template metric cards, AI copy clichés ("Elevate", "Seamless"). Mine the product's real
-   domain for a **signature element** that could only exist for this product.
+   domain for candidate **signature elements** that could only exist for this product, and
+   **propose** them: the user chooses (§6.2).
 3. **Content before container.** Resolve the actual feature/data first, then the frame.
 4. **Grayscale-first.** Prove layout and hierarchy with size/weight/spacing *before* color,
    so decoration can't fake structure.
 5. **Constrain the system up front.** Closed scales for spacing, size, type, and z-index —
    no arbitrary values. Fewer choices is a feature, not a limitation.
-6. **Commit to one visual identity** appropriate to the product type; match type and shape
-   personality to its tone. Record the choice in `design.md`.
+6. **Settle one visual identity** appropriate to the product type: propose options with a
+   recommendation, matching type and shape personality to its tone, and record the one the
+   user chose in `design.md`. Where the product already has one, that is it (§4.2).
 
 ## BUILD — implementing the UI
 

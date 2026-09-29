@@ -4,6 +4,11 @@ Load when the repo shows a server framework, route/controller layers, database o
 folders, a Dockerfile, or an API schema. Adds server-side concerns to each phase. Framework
 is detected, never assumed.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec)
 - Nail the **contract**: endpoints/messages, request/response shapes, status/error semantics,
   idempotency, versioning. The contract is the hardest thing to change later (Hyrum's Law —

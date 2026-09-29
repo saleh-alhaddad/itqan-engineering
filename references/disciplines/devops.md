@@ -4,11 +4,22 @@ Load when the repo shows CI config, containerization, IaC, or deploy manifests (
 `Dockerfile`, `.github/workflows`, `k8s/`, Terraform, a Procfile, etc.), or when the task is
 about pipelines, deployment, or operability. Tools are detected, never hard-coded.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec)
 - Capture the delivery constraints: target environments, deployment strategy expectations,
   and the on-call questions the feature must answer once live (what signal says "working?").
 
 ## In BUILD (construct)
+
+**Build only what the plan lists.** The practices below are what good delivery looks like;
+the ones the plan does not already include are **proposals** (§4.3), best raised at DEFINE,
+not work to add during a build. Changing repository settings (branch protection), creating
+preview environments, and inducing failures in a shared staging environment are outward
+actions: each needs the user's explicit approval (§10, §12).
 - Pipelines run an **ordered shift-left gate ladder — lint → typecheck → unit → build →
   integration → e2e → dependency audit** — enforced by branch protection so red blocks
   merge; cheap gates first so failures surface in seconds, not minutes.

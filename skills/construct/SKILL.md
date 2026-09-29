@@ -12,7 +12,7 @@ Your job is to turn a plan (or a clear small ask) into working code that matches
 project is already written, proven by tests you wrote *before* the code. You build in small
 slices, keep each one green and committable, and stop when the task is done — not more.
 
-Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), reconciling against the code (§5.2), memory
+Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), reconciling against the code (§5.2), integrations and data leaving (§10), memory
 (§4), role dial (§6), skip rules (§7), multi-agent rules (§8), the commit/push policy (§12),
 the close-out summary (§13), freshness (§17), and workspace integrity (§20).
 
@@ -35,8 +35,9 @@ Before writing anything, know the rules of *this* codebase and how it already so
   things out — folders, naming, layering, error style. Do not inherit a sibling's defects just
   because they are there: where the repo states a rule (a linter's length/complexity limit,
   a documented convention) the new code meets it even when neighbouring code doesn't, and you
-  note the neighbour's violation rather than copying it. This is §17's
-  modern-within-convention rule applied to shape.
+  note the neighbour's violation rather than copying it. That covers a **stated-rule gap**
+  only: a neighbour that is actually defective (unsafe, or wrong in what it returns) is §4.2's
+  stop, with its evidence and the user's fix-here-or-isolate choice, never a quiet note.
 - **Follow the code, name what you followed, and ask when it has two ways (§4.2).** Before
   writing code of a kind the repo already has, mirror its nearest existing instance and
   record `Mirrors: <path> (<what>)` in the journal and the change summary. If instances of
@@ -62,10 +63,11 @@ surface (e.g. accessibility for frontend, platform HIG for mobile, contracts for
 
 **Choosing or upgrading a tool/library/version?** Don't pick "the latest" from memory —
 establish today's date and check the web for the current version and any deprecations, then
-cite it (§17). Before *adopting* a new dependency, also check that it's worth taking at all:
-license compatibility with the project, maintenance health (recent releases, open-issue
-trend), and supply-chain trust — not just the version number. Match what the repo already
-uses unless the task is explicitly an upgrade.
+cite it (§17). A dependency the plan does not name is **never adopted on your own**: it is an
+amendment (a kind the repo has never had, §4.2), put to the user with what it is for, the
+evidence that it is worth taking (license compatibility, maintenance health, supply-chain
+trust), and any data it sends outside (§10). Match what the repo already uses unless the task
+is explicitly an upgrade.
 Also load any **cross-cutting concern pack** the change touches: `database.md` (migrations,
 queries), `security.md` (untrusted input/auth/secrets), `devops.md` (CI/containers/deploy).
 Build the way this codebase already builds: `standards.md`'s `Stack:` and `Conventions:`
@@ -162,12 +164,13 @@ small end-to-end piece of behavior, not a half-built horizontal layer. Slices ar
 commit *boundaries*, but **the run never commits on its own** (§12): when the work is done,
 present the per-file change summary + risks + a suggested small commit message and let the
 user approve. Never push without explicit approval, and never mention the AI in a commit
-message.
+message unless `profile.md`'s `Commit attribution:` requires it (§12).
 
-**Log and document every change (§13.1).** Append a dated entry to the touched feature's
-changelog (`engineering/changelog/<feature>/`) — the daily history is written by whoever
-makes the change — and if the feature/file has its own doc (module README, `docs/*.md`),
-update it in the same change, never as a follow-up.
+**Document every change (§13.1).** If the feature/file has its own doc (module README,
+`docs/*.md`), update it in the same change, never as a follow-up. The dated entry in the
+feature's changelog (`engineering/changelog/<feature>/`) is written once the change is proven
+(after `verify`), by whichever skill closes the task, never here: an entry for work that is
+later abandoned is memory that lies.
 
 **Touching logic or a response shape? The automation tests move with it.** Any change to
 business logic or an API/response contract updates the impacted automation tests and spec
@@ -214,8 +217,10 @@ are green. Match the project's test tooling; do not introduce a second framework
   surface the blocker instead of grinding — repeated failure usually means the plan or an
   assumption is wrong, not the code.
 - **When the plan is silent or wrong**, don't deviate silently and don't stall. If the choice
-  changes nothing the user approved (which helper to reuse, a private name, the order of two
-  independent steps), **record the ruling and its reason in `intake.md` and continue**. If the
+  changes nothing the user approved (a private name, the order of two independent steps),
+  **journal the ruling and its reason in `log.md` as `By: run` and continue** (§2.1). Never
+  in `intake.md`: that file holds the user's answers, and judgment learns from it (§4.1).
+  Which of two existing helpers to reuse is not a ruling: it is §4.2's two-ways question. If the
   approved shape changes (missing task, wrong order, infeasible dependency, scope moving),
   route back to `blueprint`'s amendment loop and get the changed part re-approved. Unsure which
   it is, or the change is irreversible? Treat it as an amendment.
@@ -244,7 +249,9 @@ For each finding, before writing anything:
 3. **Check it doesn't break something else** — an existing test, a documented decision in
    `decisions.md`, or a constraint from `spec.md`.
 4. **Then implement, one finding at a time, each with its own test cycle** (Step 2's loop
-   applies to fixes too — the repro or the guard test comes first).
+   applies to fixes too — the repro or the guard test comes first). A finding written as a
+   §4.3 proposal is not an instruction: it waits for the user to choose an option, and you
+   build the option they chose, not the reviewer's pick.
 
 **When a finding is wrong, say so with reasoning** — cite the code, the test, or the ADR that
 contradicts it, and leave the fix undone pending the user's call. Silent compliance with a
@@ -263,10 +270,12 @@ got.
 
 ## Step 5 — Hand off with evidence
 
-Do not declare the task done here. Update `state.json` (`construct` → in_progress/done) and
+Do not declare the task done here. Update `state.json`: `construct` is `done` only when the
+reconciliation table (§5.2) shows every plan item `done`, read from the code; otherwise it
+stays `in_progress`. Then
 hand to `verify`, which exercises the whole thing for real and demands the evidence. Record
-any durable decision (a library chosen, a pattern established) in `decisions.md` with its
-*why* (§4).
+any durable decision the user made (a library they approved, a pattern they chose) in
+`decisions.md` with its *why* (§4).
 
 ## Composition
 

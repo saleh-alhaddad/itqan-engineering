@@ -69,8 +69,8 @@ writes (§8). Single-agent: work the checklist inline with fresh eyes.
 
 | The thought | The reality |
 |---|---|
-| "It's internal-only, not exposed" | Internal networks get breached. Assume the attacker is already inside. |
-| "You'd have to be logged in to hit it" | Registration is usually free. Authenticated ≠ trusted. |
+| "It's internal-only, not exposed" | Internal networks get breached: model a **network-internal attacker** too. But rank by who can reach it, verified, not by the worst case imagined. |
+| "You'd have to be logged in to hit it" | Check whether anyone can register (the signup route or its config, cited). Authenticated ≠ trusted either way. |
 | "Another tenant couldn't reach this" | That is the claim to *test*, not assume — it is the definition of IDOR. |
 | "No one would think to try that" | Attackers do this full-time and share notes. |
 | "It's validated on the client" | Client validation is UX. The server is the boundary. |
@@ -85,18 +85,33 @@ Write `security-review.md` in the task folder (bootstrap per §1), ranked by sev
 
 ```
 # Security review — <target> · <date>
+### Coverage — entry points reviewed (file:line), and for each checklist item the read or
+                search that cleared it (absence claims show their searches, §5.2)
 ### Critical  — exploitable now: <boundary violated> → <impact> → <fix>
-### High      — likely exploitable / sensitive-data exposure
+### High      — exploitable given a verified precondition / sensitive-data exposure
 ### Medium    — defense-in-depth gaps
 ### Info      — hardening suggestions
 ```
 
-**Calibrate severity by reachability × impact, not by how alarming the category sounds:**
+Every finding carries its **evidence**: a **source-to-sink trace** (where untrusted input
+enters, file:line, through each step, to the dangerous operation, file:line) and its
+**reachability, verified** (the route, the auth guard or its absence, the signup config,
+cited). That is enough to rank it: `harden` reads and does not attack, so a traced,
+reachable hole is ranked by the table above even though nothing was fired. A path with a step
+you could not trace is labelled a **hypothesis**, and says which step is missing; unverified
+reachability takes the lower rank, labelled unconfirmed. A committed secret is ranked by
+what it grants, never "reproduced" by using it: when the grants cannot be confirmed without
+using it, rank by what its name and location indicate (a key in `prod.env` grants production
+access), labelled unconfirmed, and let the user confirm.
+
+**Calibrate severity by reachability × impact, not by how alarming the category sounds.** When
+the two columns point at different rows (reachable by anyone, but the impact reads like the
+High row), take the more severe row and say which column set it:
 
 | Rank | Who can reach it | What they get |
 |---|---|---|
 | **Critical** | anonymous, or any self-registered user | auth bypass · RCE · another tenant's data · money movement · mass data exposure |
-| **High** | authenticated, or a plausible precondition | a single user's sensitive data · privilege escalation within a tenant · destructive action |
+| **High** | authenticated, or a precondition shown to hold | a single user's sensitive data · privilege escalation within a tenant · destructive action |
 | **Medium** | needs an unlikely chain, or is a missing layer behind a working control | defense-in-depth gap · information leak that aids a bigger attack |
 | **Info** | not reachable today | hardening that prevents a future mistake |
 
@@ -119,12 +134,19 @@ sense of security. Report the class with all its locations.
 
 ## Step 4 — Close the loop
 Write `security-review.md` to disk and confirm it is non-empty (§20.2) **before** touching the
-ledger — then record a `harden` entry in `state.json.phases` — `approved: true` on a clean pass, or
+ledger — then record a `harden` entry in `state.json.phases` — `approved: true` on a clean pass
+**that has a Coverage section** (no coverage, no pass: a clean result is a set of absence
+claims, and each needs its search), or
 `waived: true` only on the user's explicit acceptance of open findings (§2) — so a resumed
 run re-proves the security gate instead of trusting it. Critical/High must be fixed (or
 defensibly, explicitly accepted by the user) before ship.
-Route fixes through `construct` → `verify`, then re-audit the changed part. Record accepted
-risks in `decisions.md`.
+**List the findings and let the user choose, per finding:** fix now, accept (with its risk
+recorded in `decisions.md`), or a follow-up. Variant analysis can surface a whole class of
+siblings; fixing all of them grows the task, so that is the user's call (§4.1, §4.2). Chosen
+fixes go through `construct` → `verify`, and a finding is resolved only on evidence
+(§5.1), not because the code changed: `verify` writes and runs a reproduction (a request or
+failing test) that worked before the fix and fails after it. A leaked secret is resolved by
+the user confirming it was rotated, and its removal from history is a separate decision.
 
 ## Composition
 - **Consumes:** the code/diff/config, `security.md`, project memory, current advisories (web).

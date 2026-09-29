@@ -159,7 +159,8 @@ a failure to find enough.
 
 ## Fix loop
 
-Critical and High findings must be resolved (or explicitly, defensibly waived by the user)
+Critical and High findings must be resolved (or explicitly waived by the user, recorded as
+`waived: true` on `inspect` in `state.json` with their reason)
 before `release`. Route fixes back through `construct` → `verify` so the fix itself is
 proven, then **re-review only the changed part** — a full re-read of untouched code burns
 context and invites new opinions on code nobody edited. Record the outcome in `review.md`.
@@ -172,11 +173,13 @@ disagreement, an architectural mismatch (§16), or findings that keep moving bec
 target does. Grinding a fourth round hides that from the only person who can decide it.
 
 **Record the phase yourself when invoked directly (§2).** Write `review.md` to disk, confirm
-it is non-empty (§20.2), then set `inspect` in `state.json` — `done` + `validated`. Under
+it is non-empty (§20.2), then set `inspect` in `state.json` to `done`, and to `validated` only
+when no Critical or High finding is open: each one resolved in the code, or explicitly waived
+by the user (§5). Under
 `engineer` the orchestrator does this; standalone, nobody else will, and an unrecorded review
 cannot gate a later `release`.
 
-**Your findings are claims, and `construct` is instructed to check them** (its Step 4b): each
+**Your findings are claims, and `construct` is instructed to check them** (its Re-entry): each
 one gets verified against the code before it is implemented, and a finding that turns out to
 be wrong comes back with reasoning rather than being silently built. Write findings that
 survive that — cite the file, the line, and what breaks — and treat a reasoned push-back as

@@ -4,6 +4,11 @@ Load when the repo shows a database: an ORM/query builder, migration folders, SQ
 schema, or a DB driver in the manifest. Adds data-layer concerns. Engine (Postgres/MySQL/
 SQLite/Mongo/…) is detected, never assumed.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec / data-model design)
 - Model the **entities, relationships, ownership, and invariants**; state what must be
   transactional and what may be eventually consistent. The schema is a contract — hard to
@@ -14,10 +19,13 @@ SQLite/Mongo/…) is detected, never assumed.
 - **Migrations are expand → backfill → contract.** Never rename/drop a column in place under
   live traffic: add the new, backfill, switch reads/writes, then remove the old — each step
   shippable and reversible.
-- **Every migration has a tested down/rollback**, not just up.
+- **Follow the repo's migration policy (§4.2).** Where it keeps rollbacks, every migration has a
+  tested down, not just up; where it migrates forward only, each migration is safe to follow
+  with a fix-forward, and that is said in the release's rollback plan.
 - **Lock safety — a correct migration can still take prod down.** Use the engine's online
-  DDL (e.g. create indexes concurrently); set a `lock_timeout` and `statement_timeout` on
-  every migration; never in-place `ALTER` a hot table; run backfills **chunked and
+  DDL (e.g. create indexes concurrently); set the **detected engine's** lock and statement
+  timeouts on every migration (Postgres: `lock_timeout`, `statement_timeout`; any other engine:
+  its documented equivalent, checked against current docs, §17); never in-place `ALTER` a hot table; run backfills **chunked and
   throttled**, watching replication lag between chunks.
 - Enforce integrity in the schema (constraints, FKs, NOT NULL, unique) — don't rely only on
   app code. Add the indexes the query patterns need; don't over-index writes.

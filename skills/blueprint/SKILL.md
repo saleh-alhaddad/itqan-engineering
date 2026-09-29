@@ -13,7 +13,7 @@ leaves the system working and can be checked on its own. You are turning the *wh
 spec) into an executable *in-what-order*, without writing the code yet.
 
 Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the resume sweep (§5), git isolation (§11), the ledger (§2), the
-intake schema (§3), memory (§4), the role dial (§6), gates (§7), multi-agent rules (§8),
+intake schema (§3), memory (§4), integrations and data leaving (§10), the role dial (§6), gates (§7), multi-agent rules (§8),
 commit policy (§12 — Status is the resume marker), freshness (§17), and workspace
 integrity (§20).
 
@@ -24,19 +24,26 @@ a STOP entry before every reply that ends the turn. Write only the files the wor
 names (§1): nothing lost, nothing stray. Before asking a question or deciding, check the
 user's judgment (§4.1) for a confirmed rule that covers it, and journal who decided.
 
-## Step 1 — Read the spec and the standards
+## Step 1 — Read the spec, the standards, and the code
 
-Load `spec.md` and `standards.md`. Every task you produce must trace back to a success
-criterion in the spec, and must fit the project's established conventions. If a success
-criterion has no task, or a task serves no criterion, fix the mismatch before continuing.
+Load `spec.md` and `standards.md`, then **read the code each task will touch** and its
+neighbours of the same kind. Every file a `Shape` or `Mirrors` line names must be one you
+opened in this run; a file the plan creates is marked new, and a kind the repo has never had
+is labelled new (§4.2). Check whether the behaviour already exists, searching two ways
+(§5.2): a task that rebuilds existing code is a plan error. Every task must trace back to a
+success criterion in the spec and fit the project's established conventions. If a criterion
+has no task, or a task serves no criterion, fix the mismatch before continuing.
 
 ## Step 1b — Validate the dependency reality
 
 Before cutting tasks, check what the plan will lean on — surprises here become release/test
-failures later: are the libraries the plan assumes actually in the manifest? Are their
-versions current and supported (web-check with today's date when unsure, §17)? Does the plan
-call any **deprecated API/method**? Is a needed capability missing entirely (a task must add
-it)? Flag findings in the plan so no task builds on a dependency that isn't really there.
+failures later: are the libraries the plan assumes actually in the manifest and lockfile
+(read them in this run)? Are their versions current and supported (checked on the web against
+today's date and cited, §17, never from memory)? Does the plan call any **deprecated
+API/method**? Is a needed capability missing entirely? That is not a task you add: it goes
+to the plan gate as options (which library, or build it), each with what data it would send
+outside (§10), and the user chooses. Flag findings in the plan so no task builds on a
+dependency that isn't really there.
 
 ## Step 2 — Decompose into vertical slices
 
@@ -89,7 +96,7 @@ just wrote, and only after it passes set `blueprint` in `state.json` (§20.2). C
 with the artifact checklist so the user sees reality, not claims:
 
 ```
-Task artifacts on disk: intake.md ✓ · spec.md ✓ · plan.md ✓ · state.json ✓
+Task artifacts on disk (from a listing run now): log.md · intake.md · spec.md · plan.md · state.json
 ```
 
 For multi-repo workspaces, every task in the plan names its **target repo** (`Repo:` line) —
@@ -145,10 +152,11 @@ the amendment loop is the correct third path — but not every surprise deserves
 learns to approve without reading:
 
 - **A ruling** — the plan is silent or ambiguous, and the choice changes nothing the user
-  approved: which helper to reuse, what to name a private function, the order of two
-  independent steps. **Record the decision and its one-line reason in `intake.md`, then
-  continue.** No re-approval; the ledger carries the ruling so a resumed run and a reviewer
-  can both see what was chosen and why.
+  approved: what to name a private function, the order of two independent steps. **Journal
+  the decision and its one-line reason in `log.md` as `By: run`, then continue** (§2.1).
+  Never in `intake.md`, which holds the user's answers and feeds judgment (§4.1). Which of
+  two existing helpers to reuse, or anything a lock names, is never a ruling: it is §4.2's
+  question or an amendment.
 - **An amendment** — the *approved shape* changes: a task is infeasible, mis-ordered, or
   missing; scope moves; an interface the spec named changes. Amend `plan.md` (change only what
   must change), **bump a plan version note** (v2, with a one-line reason), get the **changed
@@ -171,8 +179,9 @@ a ruling, however obvious it looks from inside the build.
 
 ## Skip rule
 
-For a trivial one-step change, skip planning (§7) — note the skip and let `construct` handle
-it directly with a single implicit task.
+For a trivial one-step change, planning can be skipped on §7's terms (announce it when the
+blast-radius search shows nothing depends on the change, ask when something does), and
+`construct` handles it directly with a single implicit task.
 
 ## Self-review (author's notes)
 

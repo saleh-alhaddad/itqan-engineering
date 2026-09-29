@@ -14,7 +14,7 @@ without guessing, and without starting work the user didn't want.
 
 Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the resume sweep (§5), git isolation (§11), the intake schema (§3),
 the ledger (§2), memory (§4), the role dial (§6), skip rules (§7), multi-agent rules (§8),
-integrations (§10), the session scan (§15), grounding — do not guess (§14), and
+integrations (§10), the session scan (§15), grounding — do not guess (§14), production evidence (§19), and
 workspace integrity (§20). **If invoked mid-conversation, scan the chat first (§15)** — reuse the intent,
 constraints, and decisions already stated instead of re-asking them.
 
@@ -94,18 +94,21 @@ layout, states (loading / empty / error / success), key interactions, tokens
 (color / spacing / type) if provided, responsive intent, and accessibility notes. Store the
 distilled intent, not the raw design file.
 
-For gaps: if a missing detail matters (a core screen, a primary action), ask; if it's small
-(an icon, exact spacing), fill it with a sensible default and note the assumption in
-`design.md`. If the user explicitly wants you to design it, do your best and record the
+For gaps: one the repo already settles (its existing screens, its design system) takes
+that value, cited, with no question (§4.2, §6.2); one nothing settles is asked, all together
+in one round, with a default as the guess. If the user explicitly wants you to design it, do your best and record the
 decisions — for substantial UI work, hand off to the **`design`** skill, which applies the
 shared `ui-craft.md` reference. `design.md` becomes the source of truth `construct` builds
 and `inspect` reviews the UI against.
 
 ## Step 2 — Restate and confirm
 
-Before writing the spec, also **print the assumption list** — "these are the defaults I'll
-proceed with unless you correct me now" — the unstated defaults, distinct from the stated
-goal; surfacing them is cheaper than discovering them wrong in review. Then restate the
+Before writing the spec, also **print the assumption list**: the unstated defaults, distinct
+from the stated goal. Each one is either **verified** (a fact, checked in the code or docs
+and cited) or **asked** (a decision, with your guess, §3); none enters the spec on silence.
+Surfacing them is cheaper than discovering them wrong in review. **Also search the code for
+the behaviour this spec describes**, two ways (§5.2): what already exists is cited in Scope,
+and anything claimed as new shows the searches that found nothing. Then restate the
 intent in 2–4 lines and get an explicit yes. This
 catches a wrong turn while it is still cheap. If the user corrects you, update and re-confirm.
 
@@ -140,11 +143,14 @@ Write `spec.md` in the task folder using this structure:
 <hard limits, dependencies, and assumptions being made>
 
 ## Risks & open questions
-<anything unresolved, with the current best answer>
+<anything unresolved, each asked and recorded in intake.md; one still unanswered reads
+ `Answer: unanswered (guess: <guess>)`, and the build never acts on an unanswered guess>
 ```
 
 Keep it lean and testable. Every success criterion should be something `verify` can later
-check for real. Reframe vague asks ("make it fast") into measurable ones ("p95 under X").
+check for real. Reframe vague asks ("make it fast") into measurable ones ("p95 under X"),
+where X comes from the user or from a measured baseline (§19), cited: never a number you
+picked because the criterion needed one (§14).
 
 ## Step 3b — Write to disk, verify, then update the ledger
 
@@ -205,8 +211,9 @@ done. If the user is absent, leave `approved:false` and stop; do not proceed on 
 
 ## Skip rule
 
-For a truly trivial change (one-liner, typo, config), skip this skill entirely — note the
-skip and go straight to a minimal `construct` + `verify` (§7).
+For a truly trivial change (one-liner, typo, config), this skill can be skipped on §7's
+terms: announce it when the blast-radius search shows nothing depends on the change, and ask
+when something does.
 
 ## Self-review (author's notes)
 

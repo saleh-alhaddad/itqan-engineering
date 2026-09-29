@@ -479,6 +479,41 @@ def check_status_is_read_from_code() -> None:
             err(f"skills/{skill}/SKILL.md: must reconcile status against the code (§5.2)")
 
 
+def check_audit_fixes_hold() -> None:
+    """Guard the fixes from the full no-guessing audit, each a way a run decided or claimed alone.
+
+    - Every discipline pack states it is the lowest authority: skills load packs directly and
+      never read their README, so the rule has to travel with each pack.
+    - `release` recommends the GO before anything is rolled out, and executes only what the
+      user approved: in the old order a run deployed first and granted itself the GO after.
+    - A run's own rulings are journaled `By: run`, never written to intake.md, which holds the
+      user's answers and feeds judgment: otherwise the suite learns from its own choices.
+    """
+    for pack in sorted((ROOT / "references" / "disciplines").glob("*.md")):
+        if pack.name == "README.md":
+            continue
+        if "Authority: lowest" not in pack.read_text(encoding="utf-8"):
+            err(f"references/disciplines/{pack.name}: missing the 'Authority: lowest' line (§4.2)")
+    rel = (ROOT / "skills" / "release" / "SKILL.md").read_text(encoding="utf-8")
+    i_plan, i_go, i_exec = (rel.find("## Step 3 — Plan the rollout"),
+                            rel.find("## Step 4 — Recommend GO"),
+                            rel.find("## Step 5 — Execute only what the user approved"))
+    if min(i_plan, i_go, i_exec) < 0 or not (i_plan < i_go < i_exec):
+        err("skills/release/SKILL.md: the GO must be recommended and approved before any rollout step")
+    # A traced, reachable hole is ranked as what it is: requiring an executed reproduction
+    # from a read-only reviewer capped real Criticals at Medium, below the ship block.
+    if "source-to-sink trace" not in (ROOT / "skills" / "harden" / "SKILL.md").read_text(encoding="utf-8"):
+        err("skills/harden/SKILL.md: findings must be rankable from a source-to-sink trace plus verified reachability")
+    # Skipping a gate: the blast-radius evidence decides whether the run may announce it
+    # or must ask. Asking about every typo, or never asking, both break the suite.
+    if "its evidence decides who decides" not in (ROOT / "CONVENTIONS.md").read_text(encoding="utf-8"):
+        err("CONVENTIONS.md: §7 no longer ties skipping a gate to the blast-radius evidence")
+    for skill in ["construct", "blueprint"]:
+        body = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+        if "as `By: run`" not in body:
+            err(f"skills/{skill}/SKILL.md: a run's rulings must be journaled `By: run`, not written to intake.md")
+
+
 def main() -> int:
     parsed = check_json_files()
     check_name_consistency(parsed)
@@ -501,12 +536,13 @@ def main() -> int:
     check_judgment_floor_is_intact()
     check_code_shaping_skills_follow_the_code()
     check_status_is_read_from_code()
+    check_audit_fixes_hold()
     if ERRORS:
         print(f"FAIL — {len(ERRORS)} problem(s):")
         for e in ERRORS:
             print(f"  ✗ {e}")
         return 1
-    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact, code-shaping skills follow the code, status read from code.")
+    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact, code-shaping skills follow the code, status read from code, audit fixes hold.")
     return 0
 
 

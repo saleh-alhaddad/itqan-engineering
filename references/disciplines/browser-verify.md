@@ -5,6 +5,11 @@ via the runtime's tools, §9/§10). This is *how* to prove a UI works — the me
 frontend.md's "actually render and interact". Tool-agnostic: use whatever browser control
 the runtime offers.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## The gates
 
 - **Zero console errors — and treat warnings as findings.** Open the console before

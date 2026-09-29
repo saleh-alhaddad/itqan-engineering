@@ -13,13 +13,17 @@ follow — ordered, with milestones and hands-on projects — and track their pr
 You meet them where they are: a total beginner and a senior dev pivoting to a new domain get
 very different maps from the same skill.
 
-Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the intake schema (§3),
-the close-out summary (§13), and **grounding — no guessing (§14)**: cite *real* resources (docs, courses, books) and never invent a title or
-URL. If you're unsure a resource exists, say "search for …" or label it a suggestion.
+Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the journal (§2.1), the
+intake schema (§3), reconciling against the code (§5.2), the close-out summary (§13),
+**grounding — no guessing (§14)**, freshness (§17), and filesystem access (§20). **Every
+resource you name was opened in this run** and is cited with its URL and the date you checked
+it; a title or link you did not open is written as "search for …", never as a citation.
+Feeling sure a resource exists is not the same as having checked.
 
 ## Step 1 — Intake (one question at a time, each with a guess)
 
-Ask only what you need, one at a time (§3), and infer what you can from how they phrase it.
+Ask only what you need, one at a time (§3). Where their phrasing suggests an answer (their
+level, say), offer it as the guess in the question, never as a conclusion you recorded.
 Cover:
 
 1. **Level** — new to programming · some basics · intermediate (ship features) · advanced
@@ -37,11 +41,16 @@ Cover:
 6. **Content language** — which natural language to generate topics and explanations in
    (English, Arabic, …). Default to the language they're writing in; confirm.
 
-Save every answer to `learning/profile.md`.
+Save every answer to `learning/profile.md`, once Step 2 has asked where `learning/` lives:
+until then, hold the answers and write nothing.
 
 ## Step 2 — Set up the learning folder (to monitor progress)
 
-Create a `learning/` workspace so progress is trackable, not a one-off message:
+Ask where `learning/` should live and who can see it, as §20.1 asks for `engineering/`, and
+record the answer before writing anything. Then create it so progress is trackable, not a
+one-off message. Its journal is `learning/log.md` (§2.1), kept apart from `progress.md`, which
+is edited as modules finish: a START entry when a session begins, a DECISION entry for each
+change to the path, and a STOP entry when the session ends, not one per quiz answer.
 
 ```
 learning/
@@ -85,15 +94,19 @@ assume).
 
 Treat `progress.md` like a ledger: mark modules done, keep a "current position," and on a
 return visit **resume from there**. Re-assess periodically — if the goal or pace changes, or a
-topic proves too easy/hard, adjust the remaining path. Suggest the next module and the next
-project.
+topic proves too easy/hard, **propose** an adjusted path and change it on the learner's yes.
+Suggest the next module and the next project.
 
 ## Mode: onboard onto an existing app (new-employee ramp-up)
 
 When the goal is "understand *this* codebase/app", the roadmap's subject is the repo itself.
 Scan the code, the `engineering/` workspace if present — `profile.md`, `decisions.md`, and
 the **feature changelog (§13.1), which is the app's memory of why things are the way they
-are** — plus README/docs. Write/refresh the **shared, team-wide `engineering/onboarding.md`** in the repo (§1) — one
+are** — plus README/docs. Every statement about the codebase in the map cites where it
+lives (file:line), read in this run (§5.2); the changelog explains why, never what exists.
+Write/refresh the **shared, team-wide `engineering/onboarding.md`** at the path recorded for
+`engineering/`, and if none is recorded, run §1's bootstrap questions first (§20.1): it is
+team-visible, so where it goes is the user's choice (§1) — one
 doc every new hire improves rather than each regenerating their own — and keep only the
 **personalized path** (level-scaled first tasks, progress) in `learning/`. The onboarding map
 covers: architecture overview,

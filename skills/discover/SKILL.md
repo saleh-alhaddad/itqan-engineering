@@ -34,16 +34,19 @@ question is *what net-new thing to build or adopt*.
 ## Step 1 — Understand the product as it is
 
 Scan the repo/app: what features exist, the domain, the stack, and what it already does well.
-If a live app, docs, or a connected tool (§10) is available, read it. Note the obvious gaps.
-State facts you can see; don't assume features you can't confirm.
+If a live app, docs, or a connected tool (§10) is available, read it. A feature is listed
+with where it lives (file:line or route); a **gap** is listed only with the searches that
+found nothing, run two ways, by name and by behaviour (§5.2), since code often exists under
+another name. State facts you can see; don't assume features you can't confirm.
 
 ## Step 2 — Scan the market (web, cited)
 
 Establish today's date from the environment first (§17) — a market scan is time-sensitive, so
 check the *current* state of the market as of that date, not training memory. Search the web
 for how existing apps solve this problem for this audience. Sort what you find into
-**table-stakes** (nearly everyone has it), **differentiators** (some have it, it stands
-out), and **emerging** ideas. Borrow *ideas and patterns*, not copy, and **cite every source
+**table-stakes**, **differentiators**, and **emerging** ideas, and give each its count from
+your own sample ("in 7 of the 9 products checked"), with the products listed: "nearly
+everyone has it" is a number you did not count. Borrow *ideas and patterns*, not copy, and **cite every source
 (URL)**. If a search turns up nothing solid, say so plainly — do not fabricate rivals or
 figures (§14).
 
@@ -79,7 +82,9 @@ market-perfect proposal the architecture can't hold is not a top pick; note what
 ## Step 5 — Prioritize
 
 **Anchor effort in the code, not opinion:** each proposal names the modules/services it
-touches and a rough size (XS–XL). Rank proposals by value vs. effort — impact on the stated goal, reach given the usage data,
+touches and a rough size (XS–XL). Rank proposals by value vs. effort — impact on the stated
+goal, reach given the usage data (when the data could not be gathered and the user did not
+answer, reach is `unknown` and the ranking is labelled assumption-based, §19),
 confidence in the evidence, and rough effort. Table-stakes generally come before bets. Tie
 each item to the goal and to who uses it first.
 
@@ -94,7 +99,8 @@ Write `discovery.md` in the task folder (`engineering/tasks/NNNN-<slug>/discover
 <what exists, what's strong, the gaps — grounded in the repo>
 
 ## Market scan (cited)
-Table-stakes | Differentiators | Emerging — each item with its source URL
+Table-stakes | Differentiators | Emerging — each item with its source URL and the date checked,
+and the sample it was counted from
 
 ## Usage & goal context
 <client/feature usage as the user gave it; the business goal; first-user segment>
@@ -114,8 +120,9 @@ Mark every line as fact-with-source or labeled suggestion (§14).
 When the ask is "should we use X instead of Y?" (a provider, SDK, or service), run the same
 grounded machinery on the comparison: establish today's date (§17) and web-research **current
 pricing, license/ToS limits, feature depth, integration fit with the detected stack, and
-lock-in/migration cost** — every claim cited or asked, never guessed (§14). Output a
-recommendation with the trade-offs; if adopted, record it as an ADR via `define`
+lock-in/migration cost** — every claim cited or asked, never guessed (§14). Write the comparison to `discovery.md` (the only artifact this mode produces; the journal
+and ledger are written as always, §2.1), with a
+recommendation and the trade-offs; the decision is the user's. If they adopt it, record it as an ADR via `define`
 (`decisions.md`) and let `construct`'s dependency-adoption check handle the integration.
 
 ## Step 6b — Record the phase (§2)
@@ -144,7 +151,8 @@ quick, cheap validation before committing, suggest a **prototype/spike** first (
   task exists (`define`/`engineer` own that). Pick this over `define` when the *what* is still
   open.
 - *Single-agent safe?* Yes — web search, reasoning, and a file write; no worker agents needed.
-  If web access is absent, say so and work from the repo + the user's input, labeling the
-  market scan as incomplete.
+  If web access is absent, say so: the market scan section reads **"not performed (no web
+  access)"** and lists only competitors the user named, never ones recalled from memory.
+  Work from the repo and the user's input.
 - *Leaks specifics?* No — domain-neutral; no framework or product hard-coded.
 - *Grounding?* Central — cites sources, asks for unverifiable usage data, never fabricates.

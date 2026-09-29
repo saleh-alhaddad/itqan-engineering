@@ -96,7 +96,9 @@ CONSTRUCT's build).
    `references/disciplines/` (load the matching one); **services** from multiple manifests /
    compose or k8s files / `services|apps|packages/*` layout; **UI surface** from a frontend
    or mobile presence. Record stack, standards, and patterns in `standards.md` (§4 — they
-   describe the codebase). This is what makes the suite work across backend, frontend, mobile,
+   describe the codebase), each **tagged `detected` and naming the files it came from**. Where
+   the code shows two ways for the same kind of thing, record `two ways, unresolved` and ask
+   (§4.2): never write one of them down as the standard. This is what makes the suite work across backend, frontend, mobile,
    AI/ML, or any language without hard-coding a framework. If a repo matches several
    disciplines, the changed file paths decide which dominates a given task.
 
@@ -114,24 +116,30 @@ CONSTRUCT's build).
      task's `References:`, even when no question has been asked yet), **and the task's
      `index.md` row** (status `todo`) — write the row at creation and update it on
      every phase transition, not only at ship, so a later resume can find the task (§1). For
-     a non-trivial task, first confirm a **clean baseline** (working tree clean, tests green)
+     every task (a trivial one too, unless `profile.md` says `Trivial changes: may go direct`,
+     §11), first confirm a **clean baseline** (working tree clean, tests green)
      and **isolate the work** on a fresh branch or worktree (§11), using the branch format
-     already recorded in the profile (§4 — captured by Step 1, never re-asked). If the tree is dirty
+     already recorded in `standards.md` (§4 — captured by Step 1, never re-asked). If the tree is dirty
      (e.g. a prior task's unapproved commit), surface that before building — never branch
      over another task's uncommitted work.
 
    **Edit-intent memory check (§13.1):** when the task edits an existing feature, open that
-   feature's changelog under `engineering/changelog/` — append this change (dated) or create
-   the folder with a first entry. This is the app's memory; keep it current.
+   feature's changelog under `engineering/changelog/` to read its history. Append this change
+   (dated) only once it is built and proven, never before: an entry for work that was
+   abandoned is memory that lies.
 
 5. **Classify intent, triage the change size, and infer the role.** Decide the intent (new
    project · new feature · feature ideation → route to `discover` · bug/fix · refactor ·
    design · plan-only · review-only · ship-only), then **triage the size** — this decides
    the route (§6.1):
-   - **Small / low-risk** (one-liner, typo, config, an isolated bug fix, a tiny tweak): fix
-     it **directly** — hand to `construct` + `verify`, skip define/blueprint. State that
-     you're treating it as a small change. **Any big signal cancels this:** more than two
-     code files, a new route or surface, a contract change, or `harden` being scheduled.
+   - **Small / low-risk** (one-liner, typo, config, an isolated bug fix, a tiny tweak):
+     the small route (`construct` + `verify`, skipping define/blueprint), on §7's terms.
+     Size it by **blast radius, not diff size** (§6.1): search for who depends on what
+     changes and show it. Nothing depends on it: announce the route and proceed. Anything
+     does (a one-character edit to an env-var name, a route, or a default can break every
+     caller): propose it and wait for the user's yes. **Any big signal cancels the small
+     route:** more than two code files, a new route or surface, a contract change, or
+     `harden` being scheduled. When unsure, treat it as big.
    - **Big / multi-step / risky** (a feature, several files, new surface, anything that
      touches architecture): run the **full lifecycle** — DEFINE and PLAN first, and **do not
      start implementing until the user approves the plan**.
@@ -140,7 +148,8 @@ CONSTRUCT's build).
    override with a word. Do **not** ask them to pick a level.
 
    **Fix or improvement on a running system?** Gather **production evidence first** (§19) —
-   error trackers, logs, metrics via connected tools, or ask the user for the numbers —
+   error trackers, logs, metrics via connected tools, or, with none connected, write the exact
+   read-only queries (§19) and hand them to the user —
    analyze it, and let the data choose the fix/improvement and its priority. Record the
    evidence in the task folder so the decision is auditable. Never invent production data.
 
@@ -171,8 +180,9 @@ CONSTRUCT's build).
      `loop-auto` (auto-commit +push per finished task, hands-off). Push otherwise always
      asks separately (§12).
    Record the answers in `state.json.mode` (`agents`, `loop`, `commits`) **and in the task's
-   `intake.md`** (role · loop · commits · agents — so a resumed run and a human can both see
-   what was chosen). If the runtime has no worker agents, skip the first question and note
+   `intake.md`** (loop · commits · agents — the user's answers). The role is inferred by the
+   run, not answered by the user: it goes in `log.md` as `By: run` (§2.1), never in
+   `intake.md`. If the runtime has no worker agents, skip the first question and note
    the inline degrade. Whatever the consent level, the end-of-work change summary + risks is
    always shown — and under `commits: gate` the wait for "approve commit" is loud and
    literal (§12). After every phase transition, re-run the integrity check (§20.2): the
@@ -193,9 +203,10 @@ REVIEW   → call `inspect`    → five-axis + security + perf; fix Critical/Hig
 SHIP     → call `release`    → staged rollout + rollback note + GO/NO-GO
 ```
 
-After each phase: update its ledger entry to `done` + `validated:true`, and only then move
-on. Honor the skip rules in §7 — a trivial change goes straight to a minimal `construct` +
-`verify` and skips define/blueprint.
+After each phase: update its ledger entry to `done` + `validated:true` only on its evidence
+(§5.1 for what works, the reconciliation table of §5.2 for what exists: `construct` is done
+only when every plan row is `done`, read from the code), and only then move on. Honor the
+skip rules in §7, which need the user's yes before a gate is skipped.
 
 **Between phases, review before depending on the result.** In multi-agent mode this is a
 checkpoint review of each worker's output against its acceptance criteria (§8). In
@@ -209,7 +220,8 @@ multi-agent mode exactly as it does when you built it yourself.
 
 **Looping across tasks.** If `mode.loop == loop`, when a task reaches `release` and passes,
 **run the §12 commit gate first** — pause with the summary and wait for approval, or commit
-(+push) automatically if the user opted into `mode.commits: "loop-auto"` — so the next task starts on
+(+push) automatically if the user opted into `mode.commits: "loop-auto"` and the task's
+requirements did **not** come from an external integration (§12: those stay gated) — so the next task starts on
 a clean tree (§11). Then pull the next `todo` task from `index.md` and start its run. Stop
 the loop on the circuit breaker (§8): 2 consecutive task failures, or 3 failed fix attempts
 on one task — surface the blocker instead of grinding.
@@ -225,7 +237,8 @@ session.
 
 Every dispatch carries §8's **five-field brief** — `Scope · Standards · Acceptance · Output ·
 Not yours`. Most of it you already have: `Scope` and `Acceptance` come straight from the plan
-task, `Standards` from `standards.md`, `Not yours` from the neighbouring tasks in the same
+task; `Standards` from `standards.md` **plus the task's `Shape`, its `Mirrors` line, and every
+lock that applies to it (§5.2)**, so the worker builds what the user chose; `Not yours` from the neighbouring tasks in the same
 batch. A worker whose return doesn't fill `Output` gets one retry, then you run that task
 inline (§8) — and whatever it reports, **you** re-run the proof before anything is marked
 done.
@@ -238,8 +251,11 @@ user's approval to commit; never commit uninvited, and never let a commit messag
 AI (§12). If the run stopped **before** release, also write the task's `summary.md` handoff
 now (§13) — release only writes it on a GO, and a stopped run must not leave the next session
 without one. Write memory back (§4): append durable decisions and their *why*, confirmed
-standards, and gotchas to `decisions.md` / `standards.md` / `profile.md`. Update `index.md`
-with the task's final status. Distilled facts only — never the user's source. Then run
+standards, and gotchas to `decisions.md` / `standards.md` / `profile.md`. Set the task's
+final `status` in `state.json` first (§2: `shipped` only on a confirmed GO; `abandoned` or
+`superseded-by` only on the user's word), then update the `index.md` row from it. If the
+change was proven and no entry was appended yet (`verify` and `release` append theirs),
+append its dated changelog entry (§13.1); if it was not proven, write none. Distilled facts only — never the user's source. Then run
 the judgment harvest (§4.1, §13) and show its short list before calling the task closed.
 
 ## Judgment requests

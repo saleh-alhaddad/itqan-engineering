@@ -63,7 +63,11 @@ route and proceed.
 
 - Two user-approval gates before code (spec, plan) and GO/NO-GO before ship — recorded in
   the ledger; a resumed run re-proves them (§2, §5, §7).
-- Evidence before claims: run it fresh and read the output before saying "done" (§14).
+- Evidence before claims: run it fresh and read the output before saying "done" (§5.1).
+- Only the code says what exists: "done" cites the file and line, "not done" shows the searches
+  that found nothing, and the decisions you locked bind the build (§5.2).
+- It writes code the way your code already does it, names the files it followed, and asks when
+  the code has two ways (§4.2); a better way is proposed with options, never slipped in (§4.3).
 - Nothing is lost: every run journals its START, RESUME, each DECISION, and a STOP before
   every reply into the task's `log.md`, and writes only the files the workspace tree names
   (§1, §2.1).

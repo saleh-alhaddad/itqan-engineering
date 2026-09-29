@@ -5,6 +5,11 @@ systems program, an unfamiliar or mixed stack. Infer everything from the repo: f
 extensions, the build/dependency files, the test setup, and the existing structure. This pack
 holds the concerns that are true regardless of language.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec)
 - State the objective as observable behavior and testable success criteria, whatever the
   domain. If it's a library, the **public API** is the contract — design it to be hard to
@@ -21,6 +26,9 @@ holds the concerns that are true regardless of language.
   CLI invocation, the library call, the pipeline run) with real input.
 
 ## Size thresholds (reference)
+
+These numbers are **heuristics** to inform a proposal or a plan's split, never findings on
+their own; a limit the repo states (a lint rule, a documented convention) wins (§4.2).
 
 - **Change size:** ~100 lines reviews well · ~300 is the ceiling for care · ~1000 should have
   been split — by stack, file-group, horizontal, or vertical slice.

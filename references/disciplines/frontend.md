@@ -6,6 +6,11 @@ concerns. Framework and design system are detected, never assumed. Read
 [ui-craft.md](ui-craft.md) for the universal UI craft rules; this pack adds only the
 web-specific concerns on top.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec)
 - Define the **states** every view must handle: loading, error, empty, and success — not just
   the populated happy path. Missing states are the most common UI gap.
@@ -18,9 +23,10 @@ web-specific concerns on top.
 - **Build to `design.md`** — the distilled UI spec (screens, states, interactions, tokens)
   is the source of truth; if it's absent on a UI task, `define` should have captured it (§6.2).
 - **Follow the existing design system / tokens** — colors, spacing, type. Do not invent a
-  parallel styling approach. If the project has none and the user named none, a default was
-  suggested and confirmed at intake (§6.2) — e.g. a component library like shadcn/ui +
-  Tailwind for React; build on that rather than ad-hoc styles.
+  parallel styling approach. If the project has none, read `design.md` for the choice the
+  user confirmed (§6.2), e.g. a component library like shadcn/ui + Tailwind for React, and
+  build on that. **If no confirmed choice is recorded, stop and ask**: never assume one was
+  made.
 - Build **accessible by default**: semantic HTML, labels tied to inputs, keyboard operability,
   focus management, sufficient contrast (target WCAG AA).
 - Prefer **composition over configuration** for components; keep state local until it must be
@@ -50,7 +56,9 @@ web-specific concerns on top.
 - **Security:** XSS via unsanitized HTML injection, unsafe `dangerouslySetInnerHTML`/`v-html`,
   secrets shipped to the client, tokens in `localStorage` where a cookie is safer.
 - **Performance (Core Web Vitals):** oversized bundles/images, layout shift, unnecessary
-  re-renders, unmemoized expensive work, blocking the main thread, missing lazy-loading.
+  re-renders, unmemoized expensive work (only after checking the installed version and
+  compiler, §17: with React 19's compiler, manual memoization is not needed), blocking the
+  main thread, missing lazy-loading.
 
 ## In SHIP (release)
 - Progressive rollout where the surface is user-facing; watch client error rates and CWV.

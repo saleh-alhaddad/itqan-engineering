@@ -58,8 +58,14 @@ Confirm, with evidence, before anything goes out:
   code-only rollback is safe only while every migration is additive, so record which it is.
 - Observability is in place to answer "is it working?" after launch — the key signals and an
   alert on the symptom that matters.
+- **Non-functional criteria met** where the spec set them: performance/load numbers,
+  accessibility on user-facing surfaces, localization — a GO with unmet NFRs is a NO-GO.
 
-If any item fails, this is a **NO-GO** — name what's missing and route it back.
+Each item is marked with its evidence from this run, or **`not verified (<why>)`**: production
+secrets, dashboards and alerts are often out of the run's reach, and an item it cannot see
+is never ticked from `.env.example` or a config template. A `not verified` item goes to the
+user, who decides whether it blocks. If any item fails, this is a **NO-GO** — name what's
+missing and route it back.
 
 ## Step 1b — Version the release (anything with consumers)
 
@@ -78,18 +84,20 @@ migration to reverse, and the signal that says "roll back now." Name **the data 
 commands re-run with the expected pre-release result. A rollback you design under
 pressure is one you get wrong. This is required even for a one-step release.
 
-## Step 3 — Roll out by risk
+## Step 3 — Plan the rollout by risk (written, not executed)
 
-Match the rollout to the blast radius:
+Write the rollout plan into `release.md`; nothing is merged or deployed in this step. Match
+it to the blast radius:
 - **User-facing / risky:** stage it behind a feature flag — off in prod → internal/team →
-  small % → 25% → 50% → 100%, watching the key signals at each step. Advance only while
-  healthy; hold or roll back on the pre-set thresholds.
-- **Low-risk / no user surface** (internal tool, docs, isolated fix): the staged rollout
-  collapses to a single step — but the rollback note is still written (§7).
+  small % → 25% → 50% → 100%, with the key signals to watch and the numeric thresholds that
+  hold or roll back each stage.
+- **No user-facing surface and no risk** (§7: an internal tool, docs): the staged rollout
+  collapses to a single step — but the rollback note is still written.
 
-## Step 4 — GO / NO-GO and close-out
+## Step 4 — Recommend GO / NO-GO; the user decides
 
-Make the call explicitly and record it in `release.md`. **Two verdicts, never collapsed:** whether the change
+Make your recommendation explicitly and record it in `release.md`. **The GO is the user's**
+(§4.1's floor): nothing below Step 5 happens on your recommendation alone. **Two verdicts, never collapsed:** whether the change
 is fit to *merge* (code quality, tests, review) and whether the system is fit to *deploy to
 production* (observability, rollback path, target environment). They can differ, so when
 they do, record each with its reasons rather than forcing one answer:
@@ -105,26 +113,35 @@ Rollback:  <exact steps + the trigger signal>
 ```
 
 Record the decision in the ledger: set `release.approved: true` only on a GO the user
-confirmed (§2). On GO and a healthy rollout: **write the close-out `summary.md`** (§13) — the
+confirmed (§2).
+
+## Step 5 — Execute only what the user approved
+
+Each outward step waits for its own yes (§12, §10): the merge, the deploy, **each stage
+advance**, and a rollback. The user may approve advancing within the written thresholds, or
+rolling back on a written trigger, as part of the GO; then those, and only those, run without
+asking again, and each is reported as it happens. Anything outside what was approved stops.
+
+On an approved GO and a healthy rollout: **write the close-out `summary.md`** (§13) — the
 handoff doc so the next session/AI can pick up cold (outcome, key files, decisions, how to
-run, follow-ups). Then update `index.md` to shipped, and write memory back (§4) —
+run, follow-ups). Then set the task's `status` to `shipped` in `state.json` (§2), update the
+`index.md` row from it, append the feature's changelog entry now that the change is proven
+(§13.1), and write memory back (§4) —
 durable decisions and their *why*, confirmed standards, gotchas. Distilled facts only, never
 the user's source. Run the judgment harvest (§4.1) and show its list. The task is now done,
 with evidence at every gate.
-
-- **Non-functional criteria met** where the spec set them: performance/load numbers,
-  accessibility on user-facing surfaces, localization — a GO with unmet NFRs is a NO-GO.
 
 ## Post-ship (closing the loop)
 
 **Measure the outcome, not just the health.** After the rollout bakes, read back the spec's
 success criteria / success metric with real data (§19) and record the result in
-`summary.md`'s Outcome line — the code working is not the same as the change working. The
+`summary.md`'s `Result:` line — the code working is not the same as the change working. The
 `Operate:` runbook in `summary.md` (§13) is the on-call handoff: dashboards, alerts, the
 rollback command, known failure modes, escalation.
 
 Shipping isn't the end of ownership. If a rollback trigger fires or an incident surfaces
-after launch: roll back first (stability before diagnosis), then root-cause it via `verify`
+after launch: recommend rolling back first (stability before diagnosis) and do it on the
+user's yes, or at once if they pre-approved rollback on that trigger; then root-cause it via `verify`
 Part B, add the regression guard, and write a short **blameless postmortem** into
 `decisions.md` — what happened, why, and what now prevents it. The learning feeds the next
 task; an incident that taught nothing will repeat.

@@ -4,6 +4,11 @@ Load for any change touching untrusted input, authentication, authorization, sec
 payments, personal data, or external integrations. Deepens the security axis of `inspect` and
 backs the `harden` skill. Framework-neutral; adapt to the detected stack.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## Threat-model first
 Map the **trust boundaries** (where untrusted data crosses into trusted code), then walk
 **STRIDE** — Spoofing, Tampering, Repudiation, Information disclosure, Denial of service,

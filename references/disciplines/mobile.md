@@ -6,6 +6,11 @@ native/mobile concerns. Platform and framework are detected, never assumed. Read
 [ui-craft.md](ui-craft.md) for the universal UI craft rules; this pack adds only the
 mobile-specific concerns on top.
 
+> **Authority: lowest ([CONVENTIONS §4.2](../../CONVENTIONS.md)).** This pack is general guidance, not this
+> codebase's rules. Where the repo already does something its own way, follow the repo, and
+> say when you use this pack's advice instead. It never overrides a decision the user made,
+> and it never justifies copying a defect.
+
 ## In DEFINE (spec)
 - Which **platforms** (iOS / Android / both) and minimum OS versions.
 - **Offline behavior**: what works with no network, how data syncs, conflict handling.
