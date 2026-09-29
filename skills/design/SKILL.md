@@ -74,8 +74,9 @@ single accent) as prompts for where to look, not as findings in themselves. Pres
 Write the findings to **`design-review.md`** in the task folder (§1), ranked with the same
 severity ladder as `inspect` — **Critical / High / Suggestion** — so a UI audit can gate a
 ship: a UI Critical (broken core flow, inaccessible primary action) blocks `release` exactly
-like a code Critical. The user chooses, per finding, fix now, accept, or follow-up; chosen
-fixes go through `construct` → `verify`.
+like a code Critical. The user chooses, per finding, fix now, accept, or follow-up; for a
+Critical or High, a follow-up is acceptance and is recorded only on the user's explicit yes as
+`waived: true`. Chosen fixes go through `construct` → `verify`.
 
 **These thoughts mean stop — taste is being mistaken for judgment, in one direction or the
 other:**
@@ -93,7 +94,8 @@ other:**
 
 Whoever ran this owes the ledger an entry — **`engineer` is not always there to do it.** After
 writing `design.md` or `design-review.md`, set a `design` entry in the task's `state.json`
-(§2's optional phases) with `status: done`, `validated: true`, and the artifact name, and
+(§2's optional phases) with `status: done`, the artifact name, and `validated: true` only
+when no Critical/High finding is open (each resolved in the code or waived by the user), and
 verify the file is on disk and non-empty first (§20.2). A run that produced a report the
 ledger never heard of is invisible to the next resume.
 

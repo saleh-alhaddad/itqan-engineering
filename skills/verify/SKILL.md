@@ -70,7 +70,10 @@ failure: name it, **propose** quarantining it to the user, and log it as a defec
 investigate — never re-roll a flaky suite until it happens to pass. A quarantine takes
 effect only on the user's yes. If the quarantined test is **outside the changed scope**, it
 does not block this task: `verify.md` names the exception, and everything else must pass. If
-it is **inside** the changed scope, `verify` is not green until it is fixed or explained.
+it is **inside** the changed scope, `verify` is not green until it is fixed, or root-caused
+per Part B (the cause at its file:line) and the user accepts shipping with it. That
+acceptance is recorded in `verify.md` and in `decisions.md`, with the cause's file:line and
+`By: user`, so a resume and `release` can tell an accepted defect from an unexamined one.
 
 **Exercise it, not just the unit tests.** Tests passing is necessary, not sufficient — run
 the real thing the way a user would and confirm the observable success criteria from the

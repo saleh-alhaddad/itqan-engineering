@@ -23,6 +23,7 @@ A full audit of every skill, `CONVENTIONS.md`, and every discipline pack against
 - Round 1: five independent reviewers found about 80 places across the suite; every quote was checked against the text before a fix.
 - Round 2: three reviewers checked the fixes and found 21 more, including three where a fix made things worse (a security gate that could no longer block a real Critical, a waived finding that would block every resume, a flaky test outside the task that would stall every task) and two over-corrections (asking about every design gap, asking before every typo).
 - Round 3: a behavioural test of ten situations drawn from those fixes, answered 10 of 10 as intended; its remaining ambiguities were closed, including a final status for small-route tasks.
+- Round 4: a fresh reviewer over the whole release found six Medium issues and nothing High: among them, an interrupted small-route task would restart at `define` (there is now a `skipped` phase status, re-checked on resume against the change as it stands), a UI Critical that did not actually block `release`, and `shipped` written after a GO whose rollout never became healthy. A final check of those fixes found four narrower edge cases, also closed. Each round found fewer and smaller issues than the one before.
 
 ## [0.0.10] — 2026-09-29
 

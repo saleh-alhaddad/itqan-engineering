@@ -41,7 +41,8 @@ Confirm, with evidence, before anything goes out:
 - `verify` is green *now* and `inspect` has no unresolved Critical/High findings — nor does
   `harden`: for any security-sensitive change (auth, PII, payments, new public surface) a
   `harden` pass is **required**, not optional, and an open security Critical is always a
-  NO-GO (unwaived = ship blocked).
+  NO-GO (unwaived = ship blocked). Nor does `design-review.md`, where a UI audit ran: an
+  open UI Critical blocks exactly like a code one.
 - **The reconciliation table (§5.2) is clean**: every spec criterion and plan task `done`, read
   from the code in this run, with no `missing` or `done differently` row left unresolved.
 - **CI is green on the exact commit being shipped** (where a pipeline exists), and the
@@ -122,7 +123,11 @@ advance**, and a rollback. The user may approve advancing within the written thr
 rolling back on a written trigger, as part of the GO; then those, and only those, run without
 asking again, and each is reported as it happens. Anything outside what was approved stops.
 
-On an approved GO and a healthy rollout: **write the close-out `summary.md`** (§13) — the
+**A rollout that is held or rolled back** leaves the task's `status` as `blocked-on:<reason>`
+and the `release` phase `in_progress` (§2), with the reason in `release.md`: the GO stands, the
+ship did not happen, and a resume picks up at the rollout, never at a record that says done.
+
+On an approved GO and a rollout confirmed healthy: **write the close-out `summary.md`** (§13) — the
 handoff doc so the next session/AI can pick up cold (outcome, key files, decisions, how to
 run, follow-ups). Then set the task's `status` to `shipped` in `state.json` (§2), update the
 `index.md` row from it, append the feature's changelog entry now that the change is proven
@@ -150,7 +155,7 @@ task; an incident that taught nothing will repeat.
 
 - **Consumes:** the reviewed change, `verify` evidence, `review.md`, project memory.
 - **Produces:** `release.md` (checklist evidence, rollback plan, decision), the close-out **`summary.md`** on a
-  GO (§13), updated `index.md` and memory; `release` marked done+validated in the ledger.
+  GO with a rollout confirmed healthy (§13), updated `index.md` and memory; `release` marked done+validated in the ledger.
 - **Hands off to:** `engineer` (which pulls the next task in loop mode).
 - **Receives from:** `inspect` (cleared change), `harden` (no open Critical), or `engineer`.
 - Invoked directly, or by `engineer` as the SHIP phase.

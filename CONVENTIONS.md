@@ -155,15 +155,16 @@ This is what makes a run resumable and self-healing. Each task carries one:
 }
 ```
 
-- `status`: `todo` · `in_progress` · `done` · `blocked`
+- `status`: `todo` · `in_progress` · `done` · `blocked` · `skipped`
 - `validated`: whether the phase was **re-proven** on the most recent run — `done` with
   `validated: false` means "claimed complete, not re-checked this run" (§5).
 - Top-level task `status` (beside `phases`): `todo` · `in-progress` · `blocked-on:<who/what>` ·
   `done` (finished on the small route, nothing to release) · `shipped` · `abandoned` ·
   `superseded-by:<task>`, with a `reason` for the last three and for `blocked-on`; a status
   copied from an old row that gave none reads `reason: not recorded (migrated)`. It is what `index.md`'s row rolls up from, so a rebuilt row can never
-  revive an abandoned task. **The skill that ends a task writes it** (`release` on a
-  confirmed GO: `shipped`; `verify` when a small-route task goes green: `done`; `engineer`
+  revive an abandoned task. **The skill that ends a task writes it** (`release`, after a
+  confirmed GO **and** a rollout confirmed healthy: `shipped`; a GO whose rollout was held or
+  rolled back is `blocked-on:` with the reason, never `shipped`; `verify` when a small-route task goes green: `done`; `engineer`
   when the user abandons or supersedes a task). A ledger
   written before this field existed has none: copy a terminal status from its row into it,
   and **never overwrite a terminal row from phase data**.
@@ -173,7 +174,7 @@ This is what makes a run resumable and self-healing. Each task carries one:
 - `phases` may also carry **optional entries** — `harden`, `assess`, `design`, `discover` — when those
   ran for this task; `harden` records `approved: true` on a clean pass or `waived: true`
   when the user explicitly accepts open findings, and `inspect` records `waived: true` the
-  same way for a Critical/High finding the user accepted. Optional phases are re-proven by the §5
+  same way for a Critical/High finding the user accepted, as does `design` for a UI audit's. Optional phases are re-proven by the §5
   sweep like any other.
 - **`done` requires the artifact on disk, non-empty (§20.2).** Content that exists only in
   chat is not done — write the file, verify it exists, then update the ledger. Never the
@@ -749,6 +750,11 @@ as a claim to check, not a fact. Then walk the phases in order:
 ```
 for phase in [define, blueprint, construct, verify, inspect, release]
              + any optional phases the ledger carries (harden, assess, design, discover):
+    if status == "skipped"     -> re-run §6.1's blast-radius check on the change as it is
+                                  now. Still small, and no dependents without the user's
+                                  yes: pass over it. Grown into a big signal, or dependents
+                                  nobody approved: set it back to `todo`; this is the resume
+                                  point, since the skip no longer holds
     if status == "todo"        -> this is the resume point; start here
     if status == "in_progress" -> this is the resume point; re-establish the partial
                                   state (what exists, what's half-done) and continue it
@@ -784,7 +790,9 @@ for phase in [define, blueprint, construct, verify, inspect, release]
           - harden:    security-review.md exists, and every Critical/High is resolved in the
                        code (its reproduction re-run and now failing, §5.1) or explicitly
                        waived by the user
-          - assess / design / discover: their artifact exists and is non-empty
+          - design:    its artifact exists; for an audit, every Critical/High finding in
+                       design-review.md is resolved in the code or waived by the user
+          - assess / discover: their artifact exists and is non-empty
         if valid   -> mark validated:true, continue
         if invalid -> repair THIS phase (or re-seek approval), re-validate, then continue
 ```
@@ -793,7 +801,7 @@ Run the **workspace integrity check (§20.2) before the sweep**: any phase marke
 whose artifact is missing or empty is downgraded to `in_progress` and repaired before anything
 advances. **A repaired artifact loses what it had earned.** Anything that recorded a user's
 answer, approval, lock, or waiver (`spec.md`, `plan.md`, `intake.md`, a waiver in
-`security-review.md` or `review.md`, the GO) comes back **unapproved** and is shown to the user
+`security-review.md`, `review.md` or `design-review.md`, the GO) comes back **unapproved** and is shown to the user
 again, since they approved the words, not a reconstruction of them: its ledger flag
 (`approved`, `waived`) returns to `false`, and a rebuilt `Locks:` line binds nothing until
 re-confirmed. `verify.md`, `evidence/` and `release.md`'s checks are never rebuilt from memory
@@ -994,7 +1002,8 @@ intake → (refine) → spec → USER APPROVAL → plan → USER APPROVAL → bu
 
 There are **two** approval gates before code (on the spec, then on the plan) and the GO/NO-GO
 at ship. Each is recorded via the `approved` flag in the ledger (§2), so a resumed run cannot
-skip one.
+skip one; a phase is passed over only when the ledger says `skipped` and the skip still holds
+(§5).
 
 **"Read-only" means it does not change your code — not that it writes nothing.** `inspect`,
 `harden`, `assess`, and `discover` are read-only in that they never edit source, migrations,
@@ -1044,7 +1053,10 @@ the function, uses the route, the env var, the column) and show it:
 - **Any big signal of §6.1** (including a changed name, path, signature, or schema that
   others use, which is a contract change): the small route is off; run the full lifecycle.
 
-Nothing the run decided alone is ever recorded as if a human had.
+Either way, the skipped phases are written to the ledger as `status: "skipped"` with the
+reason (and, when the user said yes, a pointer to it in `intake.md`), so a resumed run passes
+over them instead of starting at `define`. Nothing the run decided alone is ever recorded as
+if a human had.
 
 ---
 

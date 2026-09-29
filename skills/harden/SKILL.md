@@ -141,7 +141,9 @@ claims, and each needs its search), or
 run re-proves the security gate instead of trusting it. Critical/High must be fixed (or
 defensibly, explicitly accepted by the user) before ship.
 **List the findings and let the user choose, per finding:** fix now, accept (with its risk
-recorded in `decisions.md`), or a follow-up. Variant analysis can surface a whole class of
+recorded in `decisions.md`), or a follow-up. For a **Critical or High**, a follow-up still
+ships the hole, so it is acceptance: say so, and record it only on the user's explicit yes as
+`waived: true`, with the risk in `decisions.md`. A plain follow-up is for Medium and Info. Variant analysis can surface a whole class of
 siblings; fixing all of them grows the task, so that is the user's call (§4.1, §4.2). Chosen
 fixes go through `construct` → `verify`, and a finding is resolved only on evidence
 (§5.1), not because the code changed: `verify` writes and runs a reproduction (a request or

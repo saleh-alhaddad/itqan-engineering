@@ -205,8 +205,9 @@ SHIP     → call `release`    → staged rollout + rollback note + GO/NO-GO
 
 After each phase: update its ledger entry to `done` + `validated:true` only on its evidence
 (§5.1 for what works, the reconciliation table of §5.2 for what exists: `construct` is done
-only when every plan row is `done`, read from the code), and only then move on. Honor the
-skip rules in §7, which need the user's yes before a gate is skipped.
+only when every plan row is `done`, read from the code), and only then move on. Honor §7's
+skip rules: announce the small route when nothing depends on the change, ask when something
+does, and write the skipped phases as `skipped` so a resume passes over them.
 
 **Between phases, review before depending on the result.** In multi-agent mode this is a
 checkpoint review of each worker's output against its acceptance criteria (§8). In
@@ -249,10 +250,11 @@ When the task ships (or the user stops the run): **output the change summary** �
 what/why, the risks worth weighing, and a suggested small commit message — then wait for the
 user's approval to commit; never commit uninvited, and never let a commit message mention the
 AI (§12). If the run stopped **before** release, also write the task's `summary.md` handoff
-now (§13) — release only writes it on a GO, and a stopped run must not leave the next session
+now (§13) — release only writes it on a GO with a healthy rollout, and a stopped run must not leave the next session
 without one. Write memory back (§4): append durable decisions and their *why*, confirmed
 standards, and gotchas to `decisions.md` / `standards.md` / `profile.md`. Set the task's
-final `status` in `state.json` first (§2: `shipped` only on a confirmed GO; `abandoned` or
+final `status` in `state.json` first (§2: `shipped` only after a confirmed GO and a rollout
+confirmed healthy; `abandoned` or
 `superseded-by` only on the user's word), then update the `index.md` row from it. If the
 change was proven and no entry was appended yet (`verify` and `release` append theirs),
 append its dated changelog entry (§13.1); if it was not proven, write none. Distilled facts only — never the user's source. Then run
