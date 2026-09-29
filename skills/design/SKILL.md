@@ -42,6 +42,8 @@ Detect which the user wants from their ask:
    not and none is named, **suggest a default fit to the detected stack and confirm** (§6.2)
    — e.g. a component library like shadcn/ui + Tailwind for React web, Material 3 or native
    patterns for mobile. Never silently invent a look on a task expecting a specific one.
+   New components mirror the repo's existing ones and name them (§4.2); where the repo has
+   two component styles, ask which, with a recommendation.
 2. **Shape it (ui-craft DESIGN & BUILD).** Content before container; grayscale-first to prove
    hierarchy; constrain the scales (spacing/type/color/z-index); commit to one visual
    identity and one depth strategy; escape the AI-aesthetic defaults with a signature element.

@@ -133,7 +133,8 @@ Write `spec.md` in the task folder using this structure:
 
 ## Data model & contracts
 <entities, relationships, invariants; API/event contracts; what must be transactional;
- retention & PII constraints — required whenever the change touches data or a contract>
+ retention & PII constraints — required whenever the change touches data or a contract.
+ Shaped like the repo's existing schemas and contracts, with `Mirrors:` naming them (§4.2)>
 
 ## Constraints & assumptions
 <hard limits, dependencies, and assumptions being made>

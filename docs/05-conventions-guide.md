@@ -29,6 +29,10 @@ full text in [CONVENTIONS.md](https://github.com/saleh-alhaddad/itqan-engineerin
   consistent decisions and your yes before it exists. It never decides a spec or plan
   approval, a GO/NO-GO, a commit or push, a security waiver, a scope change, or anything
   irreversible.
+- **§4.2**: **follow the code**. An order of authority (a rule the repo states, then the code
+  nearest the change, then recorded standards, then your judgment, then general practice),
+  a `Mirrors:` line naming the files followed, and one question with evidence and a
+  recommendation whenever the codebase does the same thing two ways.
 
 ## Resuming, role & gates (§5–§7)
 

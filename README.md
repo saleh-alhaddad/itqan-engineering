@@ -150,6 +150,10 @@ What you type depends on the install:
   private file in your home folder (never in a repo your team shares) or turned off, and applied at the level you set per tier: ask, suggest your own
   past answer, or decide and tell you. It never decides an approval, a commit, a push, a
   security waiver, or anything irreversible, whatever the setting.
+- **It writes code the way your code is already written:** it names the files it followed
+  (`Mirrors:`), and when your codebase has two ways of doing the same thing it never picks
+  silently: it shows you both, where each is used, which is newer, and recommends one. It
+  never copies a pattern that is a bug, such as string-built SQL.
 - **Grounded, not guessed** — unknown facts are verified with citations, asked, or labeled
   suggestions; time-sensitive facts checked against today's web, not memory.
 - **Review with no session in its head** — `inspect` and `harden` declare `context: fork`

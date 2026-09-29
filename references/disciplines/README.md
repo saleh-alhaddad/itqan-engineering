@@ -4,6 +4,11 @@ These are not skills — they are reference files that the phase skills (`constr
 `inspect`) and the orchestrator (`engineer`) load based on the stack detected in the repo.
 Each pack adds the concerns specific to one surface, without hard-coding any framework.
 
+**A pack is general guidance, not this codebase's rules.** Where the repo already does
+something its own way, the repo wins, whatever the pack recommends: the order of authority is
+in [CONVENTIONS §4.2](../../CONVENTIONS.md). Use a pack's advice for what the codebase does not
+settle, and say that you are.
+
 A repo can match more than one (e.g. a full-stack web app = backend + frontend). The changed
 file paths narrow which pack's concerns dominate for a given task.
 

@@ -13,7 +13,7 @@ Read the section you need; you do not need the whole file for every task.
 | 1 | The workspace `engineering/` (closed tree) + bootstrap | 11 | Git isolation & clean baseline |
 | 2 | The phase ledger `state.json` · **2.1** checkpoint journal `log.md` | 12 | Commit & push policy (never auto) |
 | 3 | Saved-ask schema + References | 13 | Close-out summary · **13.1** feature changelog |
-| 4 | Memory · profile vs standards axis · **4.1** judgment | 14 | Grounding — do not guess |
+| 4 | Memory · **4.1** judgment · **4.2** follow the code | 14 | Grounding — do not guess |
 | 5 | Resume sweep · **5.1** the evidence gate | 15 | Session context scan & capture |
 | 6 | Role dial · **6.1** size triage · **6.2** ambition/UI | 16 | Large changes on under-specced systems |
 | 7 | Quality gates & legal skips | 17 | Freshness — today's date, web-checked |
@@ -575,6 +575,85 @@ style to decide"*, *"forget J-4"*, *"why did you decide that?"*. Each change is 
 a user DECISION in the file's own `History`, never in a shared task's `log.md`: a teammate
 reading the workspace must not learn how your rules changed. `judgment.md` holds distilled rules only: no source, no secrets, no raw data
 (§1, §3).
+
+### 4.2 Follow the code: existing patterns first, and ask when there are two
+
+Every skill that shapes code (`define` for contracts and schemas, `blueprint` for the plan's
+`Shape`, `construct` for the code itself, `design` for components, any fix a review routes)
+writes it the way **this codebase already writes that kind of thing**. Not the way a
+discipline pack describes it, not the way the model would, and not the user's habits from
+other projects.
+
+**Order of authority** (a higher one settles the question; a lower one never overrides it):
+1. **A rule stated on purpose:** a linter or formatter setting, a convention documented in
+   the repo, an ADR in `decisions.md`, a deprecation note, or a `user-stated` entry in
+   `standards.md` (the user's ruling on this repo). New code meets it even where neighbouring
+   code does not, and the neighbour's violation is noted, not copied.
+2. **The code nearest the change:** the file being edited, then its module, then its siblings
+   of the same kind. Consistency inside a module beats consistency with the rest of the repo.
+3. **`standards.md`'s `detected` entries**, which record what the code did when last read.
+   One that a higher level now contradicts, or that the code no longer matches, is corrected
+   without asking: it is the suite's own record, not the user's. If a stated rule settles
+   it, the entry records that way and the files not yet moved to it; if nothing settles it,
+   the entry says so (`services: two ways, unresolved`) until the user answers. A
+   `user-stated` entry that the code has drifted from is the user's to settle: ask.
+4. **The user's judgment** (§4.1), for questions the codebase does not settle.
+5. **Discipline packs and general practice**, only where nothing above applies, and said so.
+
+**Name what you followed.** Before writing code of a kind the repo already has (an endpoint,
+a service, a repository, a component, a test, a migration, error handling, validation),
+find its existing instances and mirror the nearest. Record the files mirrored, and anything
+deliberately not taken from them:
+```
+Mirrors: <path> (<what was taken from it>) · <path> (<what>) · not taken: <what> (<why>)
+```
+in the plan task's `Shape` (`blueprint`), the DECISION journal entry (§2.1), and the change
+summary (§12). A claim to have followed the codebase without a named file is not evidence
+(§14). **A kind the repo has never had** is said to be new, and its shape is proposed, not
+assumed: at the plan gate when it adds a file, a public interface, or a schema change. "Kind" means what a reviewer would compare
+it against: a write query where the repo only has reads is a new kind.
+
+**When the codebase has two ways, ask, and recommend.** If instances of the same kind
+disagree (some services throw and some return a result type; two HTTP clients; two folder
+layouts; class and function components), never pick silently, never blend them, and never
+add a third. Ask once, in §3's shape, showing for each way:
+```
+Way A: <what it is>
+  Used in:  <count> places, e.g. <path>, <path>
+  Latest:   <author date of the most recent commit touching a file that uses it>
+  Signals:  <ADR, lint rule, deprecation note, or migration comment, if any>
+  In scope: <whether the files this task touches use it>
+My guess: <the way you recommend, and why, in one line per reason>
+```
+Rank the recommendation by these signals, strongest first: (1) a stated rule or deprecation;
+(2) what the files this task edits already use; (3) the direction of travel, since the way
+the newest files use is usually the one the team is moving to; (4) how common each way is.
+Your own view of which is better comes last, labelled as yours (§14): a cleaner pattern the
+team is not using is a proposal, not a default.
+
+**Record the answer so it is asked once.** It is a fact about this repo, so it goes in
+`standards.md` under `Conventions:`, tagged `user-stated`, with its scope (`services return
+Result; the throwing style in legacy/ is not extended`). If it sets a direction (new code
+uses A, old code stays B until touched), also record that in `decisions.md`. After that, a
+file already written the other way keeps its own way unless the task is to migrate it:
+**two ways never meet in one file.**
+
+**When a stated rule and the file you are editing disagree** (an ADR says changed services
+return a result type; the file you are adding a method to throws), the change can either
+migrate the whole file or keep its way, and migrating grows the task. That is a scope
+decision (§7), so ask, recommending what the stated rule says and naming what else would
+change (the file's other functions and their callers).
+
+**Every question this section raises for one task goes to the user in one round**: two ways,
+a stated rule against the file, a defect in what would be followed, a new kind's shape. Asking
+them one after another turns one decision into a conversation.
+
+**A pattern that is itself a defect is never copied.** Following the neighbours is not
+permission to repeat a security hole or a bug (string-built SQL, a swallowed error, a
+secret in code). Calling a defective shared helper, extending it, or copying its shape all
+count as copying it. Stop, say what the neighbour does and why it is unsafe, and ask how to
+proceed. For a pattern that is merely dated or clumsy, follow it for this task and raise the
+improvement separately; rewriting what works was not part of the task (§7).
 
 ---
 

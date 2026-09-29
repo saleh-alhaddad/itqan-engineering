@@ -37,6 +37,12 @@ Before writing anything, know the rules of *this* codebase and how it already so
   a documented convention) the new code meets it even when neighbouring code doesn't, and you
   note the neighbour's violation rather than copying it. This is §17's
   modern-within-convention rule applied to shape.
+- **Follow the code, name what you followed, and ask when it has two ways (§4.2).** Before
+  writing code of a kind the repo already has, mirror its nearest existing instance and
+  record `Mirrors: <path> (<what>)` in the journal and the change summary. If instances of
+  that kind disagree, stop and ask, with the evidence and a recommendation §4.2 lays out:
+  never pick one silently, never blend them, never add a third. A plan task whose `Shape`
+  already names the way settles it.
 - **Existing code?** Detect the conventions and follow them — do not impose your own: the
   linter/formatter config, the test framework and how tests are named and laid out, folder
   structure, error-handling style. Record what you found in `standards.md` so later tasks

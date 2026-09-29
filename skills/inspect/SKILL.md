@@ -83,7 +83,10 @@ Review across all five with senior depth; weight by what the change actually tou
    it is still true, whether it explains *why* rather than restating *what*, and whether the
    diff changed behavior a neighbouring comment still describes the old way. A stale comment
    in a changed file is a finding, even when the comment itself wasn't part of the diff.
-3. **Architecture & design principles** — does it fit existing patterns and boundaries, or
+3. **Architecture & design principles** — does the new code match the files its `Mirrors:`
+   line names, and is every divergence explained (§4.2)? A new second way of doing something
+   the repo already does one way, two ways in one file, or a copied defect is a finding. Does
+   it fit existing patterns and boundaries, or
    bolt on a parallel way of doing things? Right layer, right coupling, no leaked
    abstractions; **SOLID** and sound use (not over-use) of design patterns; make illegal
    states unrepresentable where the types allow. Call out both under- and over-engineering.

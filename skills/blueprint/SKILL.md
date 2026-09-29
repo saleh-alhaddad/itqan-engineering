@@ -59,6 +59,9 @@ Shape:       <which files this touches or creates · new abstraction vs reuse-an
               with the reason. Genuinely ambiguous (new base class vs reuse + arguments)? Put
               BOTH options and the trade-off here — the approval gate only works on a choice
               the user can see>
+Mirrors:     <the existing files this task follows, and what it takes from each (§4.2). If
+              the codebase has two ways for this kind of code, the choice goes here as a
+              question with both ways and a recommendation, so the gate settles it>
 Size:        <XS | S | M | L>  (break down anything L)
 Status:      todo   (construct updates this to in-progress → done as the slice goes green —
                      it is the resume marker now that slices aren't committed individually, §12)

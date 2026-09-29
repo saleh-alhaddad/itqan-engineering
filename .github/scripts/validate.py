@@ -421,6 +421,30 @@ def check_judgment_floor_is_intact() -> None:
             err(f"CONVENTIONS.md: §4.1's judgment floor no longer excludes {name}")
 
 
+def check_code_shaping_skills_follow_the_code() -> None:
+    """Every skill that shapes code must require a named mirror (§4.2), and §4.2 must still
+    forbid choosing silently between two ways.
+
+    "Follow the existing patterns" was stated for a long time and still failed in real runs:
+    nothing asked for the file that was followed, and nothing covered a codebase with two
+    ways. A rule an agent cannot be checked against is a rule it can claim to have kept.
+    """
+    for skill in ["define", "blueprint", "construct", "design", "inspect"]:
+        body = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+        if "§4.2" not in body or "Mirrors" not in body and skill != "design":
+            err(f"skills/{skill}/SKILL.md: must apply §4.2 (follow the code) and name `Mirrors:`")
+        elif skill == "design" and "§4.2" not in body:
+            err(f"skills/{skill}/SKILL.md: must apply §4.2 (follow the code)")
+    conventions = (ROOT / "CONVENTIONS.md").read_text(encoding="utf-8")
+    for phrase, meaning in [
+        (r"never pick silently, never blend them, and never\s+add a third", "the two-ways rule"),
+        (r"\*\*Order of authority\*\*", "the order of authority"),
+        (r"A pattern that is itself a defect is never copied", "the no-copied-defects rule"),
+    ]:
+        if not re.search(phrase, conventions):
+            err(f"CONVENTIONS.md: §4.2 no longer states {meaning}")
+
+
 def main() -> int:
     parsed = check_json_files()
     check_name_consistency(parsed)
@@ -441,12 +465,13 @@ def main() -> int:
     check_every_skill_journals()
     check_workspace_tree_is_closed()
     check_judgment_floor_is_intact()
+    check_code_shaping_skills_follow_the_code()
     if ERRORS:
         print(f"FAIL — {len(ERRORS)} problem(s):")
         for e in ERRORS:
             print(f"  ✗ {e}")
         return 1
-    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact.")
+    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact, code-shaping skills follow the code.")
     return 0
 
 

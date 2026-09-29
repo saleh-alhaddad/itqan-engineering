@@ -3,6 +3,22 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.7] — 2026-09-29
+
+### Added
+- **Follow the code (CONVENTIONS §4.2).** An explicit order of authority for how code is written: a rule stated on purpose (lint config, documented convention, ADR, deprecation note, or the user's ruling in `standards.md`), then the code nearest the change, then recorded standards, then the user's judgment, and only then discipline packs and general practice. Discipline packs now say so themselves.
+- **`Mirrors:`**, naming the existing files new code follows and anything deliberately not taken from them, in the plan's `Shape`, the journal, and the change summary. A claim to have followed the codebase without a named file is not evidence. `inspect` checks new code against its `Mirrors:` line.
+- **When the codebase has two ways, it asks and recommends.** Never picks silently, blends, or adds a third. Each way is shown with where it is used, the date of its latest change, any stated signal, and whether the task's files use it, with a recommendation ranked by stated rules, then the files being edited, then the direction of travel, then prevalence, and the run's own taste last. The answer is recorded in `standards.md` so it is asked once per repo; two ways never meet in one file.
+- A stated rule that disagrees with the file being edited is a scope question (migrate the file or keep its way), asked with a recommendation. All such questions go to the user in one round.
+- A pattern that is itself a defect is never copied; calling or extending a defective shared helper counts as copying it.
+- Validator guard: the code-shaping skills must apply §4.2 and name `Mirrors:`, and §4.2 must keep its order of authority, the two-ways rule, and the no-copied-defects rule. Proven to fail when either side is removed.
+
+### Why
+- Real runs sometimes wrote code their own way in a codebase that already had one. The rule to follow neighbouring code existed, but nothing asked for the file that was followed, nothing covered a codebase with two ways, and nothing said the repo outranks a discipline pack's advice.
+
+### Verified
+- Two blind runs against real test repos with dated git history, two competing error-handling styles, an ADR in one repo and not the other, a stale `standards.md`, and a shared SQL helper vulnerable to injection. Run 1 followed the ADR without asking, asked with real evidence where nothing settled it, and refused the SQL helper in every task; its ambiguity report exposed a contradiction between an ADR and the one-way-per-file rule, now resolved as a scope question. Run 2 handled that case correctly; its remaining gaps were closed.
+
 ## [0.0.6] — 2026-09-25
 
 ### Added
@@ -67,6 +83,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.7]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.3...v0.0.4
