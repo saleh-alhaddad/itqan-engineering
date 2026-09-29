@@ -14,7 +14,7 @@ Read the section you need; you do not need the whole file for every task.
 | 2 | The phase ledger `state.json` · **2.1** checkpoint journal `log.md` | 12 | Commit & push policy (never auto) |
 | 3 | Saved-ask schema + References | 13 | Close-out summary · **13.1** feature changelog |
 | 4 | Memory · **4.1** judgment · **4.2** follow the code · **4.3** better ways | 14 | Grounding — do not guess |
-| 5 | Resume sweep · **5.1** the evidence gate | 15 | Session context scan & capture |
+| 5 | Resume sweep · **5.1** evidence gate · **5.2** reconcile against the code | 15 | Session context scan & capture |
 | 6 | Role dial · **6.1** size triage · **6.2** ambition/UI | 16 | Large changes on under-specced systems |
 | 7 | Quality gates & legal skips | 17 | Freshness — today's date, web-checked |
 | 8 | Multi-agent orchestration | 18 | Closing output — earn every suggestion |
@@ -750,7 +750,8 @@ for phase in [define, blueprint, construct, verify, inspect, release]
           - define:    spec.md exists, covers objective + success criteria, AND approved
           - blueprint: plan.md exists, every task has acceptance criteria, none orphaned,
                        AND approved
-          - construct: the code the plan called for exists
+          - construct: every plan item is `done` in the reconciliation table (§5.2),
+                       read from the code, with no `missing` or `done differently` row
           - verify:    the proving command runs GREEN right now (run it — do not trust it).
                        One substitution counts: a CI run recorded green and **pinned to the
                        current commit SHA** is evidence of the same strength as a local run
@@ -812,6 +813,76 @@ adding a test, is a **discovery failure to fix** — never a green run.
 | "It should work" / "it probably passes" | Hedged language is the tell. Run it and remove the hedge. |
 | "Re-running wastes the user's time" | A false "done" costs far more than one command. |
 | "Exit code zero, so it passed" | Zero can mean nothing ran. Read the count before you read the code. |
+
+### 5.2 Reconcile against the code: what exists is read, never remembered
+
+§5.1 governs claims that something **works**. This governs claims that something **exists or
+does not**: "that is already done", "that is not built yet", "we chose A". Those are where a
+run most often reports from `engineering/` or from memory, and gets it wrong.
+
+**Only the code says what exists.** The workspace records what was *intended* and what was
+*claimed*: `spec.md`, `plan.md`, `state.json`, the journal. Memory and the conversation record
+what a session *believed*. None of them is evidence that code exists or is missing. When they
+disagree with the code, **the code wins**, and the record is corrected: `state.json` and the
+`index.md` row are fixed, and an entry in the task's `log.md` says what was wrong (§2.1,
+§20.2). In the ledger, a phase whose table has any row other than `done` is `in_progress`
+with `validated: false`; the table itself, in `verify.md` or the report, carries the detail. Answering
+"where are we?" is not a reason to leave the ledger wrong. If the correction contradicts
+something the user was told earlier, in this session or in a previous one's STOP entry, say
+so plainly: "I said T4 was half done; it is done."
+
+**The baseline is what was approved.** Walk the approved spec and plan. A missing spec with
+an approved plan: the plan is the baseline, and the missing spec is noted above the table. A
+plan never approved: say so first, and label every row unapproved, since a status measured
+against an unapproved plan is not a verdict.
+
+**Presence is shown by a location; absence by the search that failed.**
+- "Done" or "exists" needs the file and line, read in this run.
+- "Missing" or "not done" needs **the searches that found nothing, shown**: the command, and
+  its scope. Search at least **two ways**, by the name the plan used *and* by the behaviour (the
+  route path, the table or column, a message string, the test's name), because code often
+  exists under another name. An absence claim with no search shown is not a claim, it is a
+  guess (§14).
+
+**The reconciliation table.** Whenever a run reports status (a resume, `verify`, `inspect`,
+`release`'s checklist, or the user asking "where are we?"), it walks every item of the
+approved spec and plan, and every locked decision, against the code:
+```
+| # | Expected (source)                          | Found in code                  | Status            | Evidence                              |
+|---|--------------------------------------------|--------------------------------|-------------------|---------------------------------------|
+| 1 | cancelOrder returns Result (plan T3)       | src/services/order.ts:14-22    | done              | read in this run                      |
+| 2 | refund webhook route (spec criterion 2)    | not found                      | missing           | grep -rn "refund" src/routes; grep -rn "/webhooks" src → 0 |
+| 3 | items fetched in one query (intake Q4: C)  | src/services/order.ts:31       | done differently  | loops one query per order             |
+```
+Status is one of `done` · `partial` · `missing` · `done differently` · `not checkable (<why>)`.
+The table says whether the code **exists and matches**, not whether it **works**: that is §5.1's
+run, reported beside the table, item by item, as proven or not yet proven. Code that cannot
+be built or run at all (a missing import, no test setup) is said once, above the table.
+**A name the plan gave is part of what was approved**: behaviour present under another name is
+`done differently (name)`, found by the behaviour search, and the user is asked whether to
+rename. It is never `missing`.
+**`done differently` is how drift is caught**: the code exists but does not match what was
+approved. Every row carries its evidence; a row without it is left out and said to be
+unchecked, never filled in from the record.
+
+**Locked decisions bind the build.** A decision the user made (an intake `Locks:` line, an
+option chosen from a proposal §4.3, a plan's `Shape` or `Mirrors`, a two-ways answer §4.2) is
+the build's instruction, not a suggestion to revisit. A lock binds **exactly what it states**:
+if it names an implementation (`order_id = ANY($1)`), that implementation; if it names only a
+goal (one query), any way that meets the goal. Before building a slice, read the locks
+that apply to it. **If the build needs to differ, stop**: it is an amendment (`blueprint`), put
+to the user with the reason, never a silent switch. A switch discovered afterwards is a
+`done differently` row and a High finding in review, whatever its merits.
+
+**Stop if you catch yourself thinking any of these before reading the code:**
+
+| The thought | The reality |
+|---|---|
+| "The ledger says it's done" | The ledger is a claim. Open the file. |
+| "I remember implementing that" | Memory is not evidence (§14). Find the line. |
+| "I searched for it and it isn't there" | Show the searches, both ways. It may live under another name. |
+| "The plan said A, but B turned out better, so I used B" | That is an amendment you skipped. Stop and ask. |
+| "This is close enough to what they chose" | Close is `done differently`. Say so. |
 
 ---
 
@@ -1531,7 +1602,7 @@ artifact therefore has a **minimum content test**; failing it counts as missing:
 | `intake.md` | at least one Q&A entry, or a recorded "no questions needed, and why" |
 | `summary.md` | what changed, what was proven, and what is left |
 | `log.md` | a START entry, and a STOP entry after the last reply the user saw |
-| `verify.md` | each command run, its counts, and pass/fail, pointing at `evidence/` |
+| `verify.md` | each command run, its counts, and pass/fail, pointing at `evidence/`; and the reconciliation table (§5.2) |
 | `release.md` | the checklist with evidence per item, a rollback plan, and the decision |
 | `state.json` | parses, and every phase marked `done` also carries `validated` |
 

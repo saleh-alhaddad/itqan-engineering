@@ -117,6 +117,13 @@ than approving a big-bang change no test can catch.
 
 ## Report format
 
+Open with the **reconciliation table (§5.2)**: every spec criterion, plan task and locked
+decision against the code, each row with its evidence read in this review. A `done
+differently` row that departs from a **locked decision** the user made, without an approved
+amendment, is a **High** finding whatever its merits; other differences (a name, a file
+placement) are rated by their impact. A `missing` row the change claims to cover is
+**Critical**.
+
 Rank findings by severity and **suppress noise** — report what a good engineer would
 genuinely act on, not every stylistic preference. For each finding give the fix, not just
 the complaint.

@@ -103,7 +103,9 @@ CONSTRUCT's build).
 4. **Find the task.** Determine whether the user is starting something new or resuming.
    - *Resuming* (they said "continue", named an existing task, or `engineering/index.md`
      has an unfinished task): read the task's `log.md` for where the last run stopped,
-     then run the **resume-and-validate sweep** (§5) before any new work. Announce where it picked up and what it re-proved or repaired.
+     then run the **resume-and-validate sweep** (§5) before any new work. Every status it
+     reports, then and whenever the user asks where things stand, is the reconciliation
+     table (§5.2), read from the code, not from the workspace or memory. Announce where it picked up and what it re-proved or repaired.
      **List `tasks/` on disk before trusting `index.md`** — a folder with no row is an
      interrupted task, not an absent one (§20.2), and starting fresh over it interleaves two
      tasks in one tree.

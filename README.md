@@ -143,6 +143,11 @@ What you type depends on the install:
   never re-presented unchanged.
 - **Evidence before claims** — tests run *now*, output read, and the count checked: zero
   tests collected is a discovery failure, not a green run.
+- **Status is read from the code, never remembered:** "done" comes with the file and line;
+  "not done" comes with the searches that found nothing, by name *and* by behaviour, so
+  work that exists under another name is not reported missing. When the workspace records
+  disagree with the code, the code wins and the records are corrected. What you chose is
+  what gets built: departing from it stops for your approval.
 - **Nothing is lost when a session dies:** every run journals its start, each resume, every
   decision, and where it stopped into the task's `log.md`, *before* the step it describes.
   The next run reads that first and knows exactly what was in flight.

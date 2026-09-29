@@ -456,6 +456,29 @@ def check_code_shaping_skills_follow_the_code() -> None:
             err(f"CONVENTIONS.md: §4.2 no longer states {meaning}")
 
 
+def check_status_is_read_from_code() -> None:
+    """Status claims must come from the code (§5.2), in every skill that reports status.
+
+    Runs reported "not done yet" for work that existed, and built a different option than the
+    one the user chose, while §5.1 (claims that something works) was fully in force. Existence
+    and absence were never covered: nothing required a search to prove absence, and nothing
+    checked the build against the user's locked decisions.
+    """
+    conventions = (ROOT / "CONVENTIONS.md").read_text(encoding="utf-8")
+    for phrase, meaning in [
+        (r"\*\*Only the code says what exists\.\*\*", "that only the code says what exists"),
+        (r"absence by the search that failed", "that absence needs the failed search shown"),
+        (r"Search at least \*\*two ways\*\*", "the two-ways search for absence"),
+        (r"\*\*Locked decisions bind the build\.\*\*", "that locked decisions bind the build"),
+        (r"`done differently`", "the `done differently` status"),
+    ]:
+        if not re.search(phrase, conventions):
+            err(f"CONVENTIONS.md: §5.2 no longer states {meaning}")
+    for skill in ["verify", "inspect", "release", "construct", "engineer"]:
+        if "§5.2" not in (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8"):
+            err(f"skills/{skill}/SKILL.md: must reconcile status against the code (§5.2)")
+
+
 def main() -> int:
     parsed = check_json_files()
     check_name_consistency(parsed)
@@ -477,12 +500,13 @@ def main() -> int:
     check_workspace_tree_is_closed()
     check_judgment_floor_is_intact()
     check_code_shaping_skills_follow_the_code()
+    check_status_is_read_from_code()
     if ERRORS:
         print(f"FAIL — {len(ERRORS)} problem(s):")
         for e in ERRORS:
             print(f"  ✗ {e}")
         return 1
-    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact, code-shaping skills follow the code.")
+    print("OK — manifests valid, skills complete, descriptions under cap, links resolve, no AI attribution, section declarations complete, tables well-formed, produced artifacts registered, ledger vocabulary reachable, invocation explicit-only, audits forked, standards fields consumed, enforced promises documented, every skill journals, workspace tree closed, judgment floor intact, code-shaping skills follow the code, status read from code.")
     return 0
 
 

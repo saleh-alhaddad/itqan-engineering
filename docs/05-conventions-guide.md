@@ -41,6 +41,11 @@ full text in [CONVENTIONS.md](https://github.com/saleh-alhaddad/itqan-engineerin
 
 ## Resuming, role & gates (§5–§7)
 
+- **§5.2**: **reconcile against the code**. Only the code says what exists: the workspace
+  and memory record what was intended or believed. Every status is a table row with its
+  evidence (a file and line, or the searches that failed), and every decision you locked
+  binds the build: a departure is an amendment you approve, never a silent switch.
+
 - **§5** — the resume sweep: walk phases backward, re-prove everything marked done (tests
   re-run *now*; approvals verified), repair what's invalid, resume at the first unproven step.
   **§5.1 is the evidence gate** — before *any* completion claim: identify the proving command

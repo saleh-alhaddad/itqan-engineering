@@ -35,6 +35,11 @@ command, run it now in full, read the real output, compare it to the claim, and 
 speak. This skill is where that gate is exercised hardest: everything downstream treats your
 verdict as fact.
 
+**Then reconcile against the code (§5.2).** Walk every spec criterion, plan task, and locked
+decision against the code as it is now, and put the reconciliation table in `verify.md`:
+each row with its file and line, or with the searches that found nothing. Never take status
+from `state.json`, the journal, or memory. A `missing` or `done differently` row is not a pass.
+
 ```
 1. Identify the proving command(s): the full test suite, plus how to exercise the actual
    behavior (run the endpoint, click the flow, invoke the function with real input).

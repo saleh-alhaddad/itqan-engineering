@@ -3,6 +3,21 @@
 All notable changes to the itqan engineering skills suite.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.0.10] — 2026-09-29
+
+### Added
+- **Reconcile against the code (CONVENTIONS §5.2).** Only the code says what exists. `spec.md`, `plan.md`, `state.json`, the journal, and memory record what was intended, claimed, or believed; when they disagree with the code, the code wins, and `state.json`, the `index.md` row, and the journal are corrected, including anything the user was told earlier.
+- Presence is shown by a file and line read in this run; absence by the searches that found nothing, shown, done at least two ways (the plan's name and the behaviour), so work that exists under another name is reported as `done differently (name)`, never `missing`.
+- **The reconciliation table**, used by every status report (resume, `verify`, `inspect`, `release`, and "where are we?"): each approved spec criterion, plan task, and locked decision, with what was found, a status (`done`, `partial`, `missing`, `done differently`, `not checkable`), and its evidence. It reports whether code exists and matches; whether it works is §5.1's run, reported beside it.
+- **Locked decisions bind the build.** Intake locks, chosen proposal options, and the plan's `Shape` and `Mirrors` are read before each task, and bind exactly what they state. A build that needs to differ stops for an amendment; a silent switch found later is `done differently` and a High finding.
+- `verify.md` must contain the table; `release`'s checklist requires it clean. Validator guard for the rule and its wiring into five skills, proven to fail in both directions.
+
+### Why
+- Real runs reported work as not started that already existed, reported status from `engineering/` or memory instead of the code, and built a different option from the one the user had chosen. §5.1 covered claims that something *works*; nothing covered claims that something *exists*.
+
+### Verified
+- Two blind runs on a repository whose workspace records contradicted its code: a task marked `todo` that existed under another name, one marked `done` that did not exist, one that broke the user's locked choice, and a journal entry calling finished work half done. The first run got all four right, found the renamed function by searching for its behaviour, corrected its own earlier statement, refused to switch to an approach it preferred without asking, and noticed the code could not run at all. Its report led to the definitions of `done` (exists, not works), a renamed item, and how literally a lock binds; the second run applied them correctly.
+
 ## [0.0.9] — 2026-09-29
 
 ### Added
@@ -101,6 +116,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 ### Added
 - Initial public release: 12 skills (resumable `engineer` orchestrator, six lifecycle phases, five specialists), shared `conventions.md` (§1–§20), installer/uninstaller with 7-guard validator and 29 tests, and the documentation book published via MkDocs Material to GitHub Pages.
 
+[0.0.10]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/saleh-alhaddad/itqan-engineering/compare/v0.0.6...v0.0.7

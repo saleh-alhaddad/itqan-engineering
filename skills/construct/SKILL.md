@@ -12,7 +12,7 @@ Your job is to turn a plan (or a clear small ask) into working code that matches
 project is already written, proven by tests you wrote *before* the code. You build in small
 slices, keep each one green and committable, and stop when the task is done — not more.
 
-Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), memory
+Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), reconciling against the code (§5.2), memory
 (§4), role dial (§6), skip rules (§7), multi-agent rules (§8), the commit/push policy (§12),
 the close-out summary (§13), freshness (§17), and workspace integrity (§20).
 
@@ -86,7 +86,10 @@ scope depth to the build ambition (MVP vs full) from the spec.
 
 ## Step 2 — Build each task test-first (the core loop)
 
-Work the plan's tasks in order (a trivial change is one implicit task). **Build into the
+Work the plan's tasks in order (a trivial change is one implicit task). **Before each task,
+read the locked decisions that apply to it (§5.2)**: intake `Locks:`, chosen proposal
+options, the plan's `Shape` and `Mirrors`. They are the instruction. If the build needs to
+differ from one, stop and raise an amendment; never switch quietly. **Build into the
 files the task's `Shape:` field names, and take the structural choice it records** — that
 decision passed the plan gate; changing it mid-build means the plan was wrong, which is the
 amendment loop, not a silent call. For each task, run

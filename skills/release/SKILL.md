@@ -12,7 +12,7 @@ Your job is the last gate: get the change live without breaking anything, and ma
 if it does break, there is a fast, known way to undo it. Shipping is a decision, not an
 afterthought — you make it explicit.
 
-Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), memory
+Read [CONVENTIONS.md](../../CONVENTIONS.md) for the workspace (§1), the ledger (§2), reconciling against the code (§5.2), memory
 (§4), role dial (§6), skip rules (§7), integrations (§10), git isolation (§11), commit
 policy (§12), the close-out summary (§13), closing output (§18 — the GO/NO-GO and its
 evidence are the output; no trailing wish-list), data-driven decisions (§19), and workspace integrity (§20).
@@ -42,6 +42,8 @@ Confirm, with evidence, before anything goes out:
   `harden`: for any security-sensitive change (auth, PII, payments, new public surface) a
   `harden` pass is **required**, not optional, and an open security Critical is always a
   NO-GO (unwaived = ship blocked).
+- **The reconciliation table (§5.2) is clean**: every spec criterion and plan task `done`, read
+  from the code in this run, with no `missing` or `done differently` row left unresolved.
 - **CI is green on the exact commit being shipped** (where a pipeline exists), and the
   artifact being promoted is the one CI tested.
 - **All changes are committed.** Nothing can be merged, PR'd, or rolled back from an
